@@ -11,11 +11,11 @@ type Logger interface {
 	Log(keyvals ...interface{}) error
 }
 
-// NewLogger initializes a new Logger
-func NewLogger() Logger {
+// New initializes a new Logger
+func New() Logger {
 	return newLogger()
 }
 
 func newLogger() Logger {
-	return log.NewJSONLogger(log.NewSyncWriter(os.Stdout))
+	return log.NewLogfmtLogger(log.NewSyncWriter(os.Stdout))
 }

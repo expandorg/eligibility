@@ -20,6 +20,7 @@ help:
 	@echo '    make add-migration  		Create a new migration file.'
 	@echo '    make build-migration  	Create a new migration file.'
 	@echo '    make test          		Run tests on a compiled project.'
+	@echo '    make run          			Build and run'
 	@echo '    make up          			Start containers'
 	@echo '    make down          		Stop and delete containers'
 	@echo '    make deploy-dev    		Deploy tagged image to staging'
@@ -29,6 +30,9 @@ help:
 
 
 build: build-service build-migrations
+
+run: build 
+	bin/eligibility
 
 build-service:
 	@echo "Building service"
