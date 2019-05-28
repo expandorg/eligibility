@@ -7,10 +7,11 @@ WORKDIR /migrations
 COPY . /migrations
 
 RUN make get-migrations-deps build-migrations
+RUN ["chmod", "+x", "/migrations/migrate.sh"]
 
 # Final Stage
 FROM alpine
 
 COPY --from=build-stage /migrations/* /migrations/
 
-ENTRYPOINT ["/migrations/main.sh"]
+ENTRYPOINT ["/migrations/migrate.sh"]

@@ -1,4 +1,10 @@
 include .env
+LAST_MIGRATION = $(shell ls -tr migrations/sql/ | tail -n 1 | cut -d'_' -f1)
+
+ifeq ($(LAST_MIGRATION),)
+	LAST_MIGRATION := 0
+endif
+
 
 .PHONY: default
 
@@ -39,25 +45,15 @@ build-service:
 	mkdir -p ./bin
 	go build -ldflags "-w -X main.GitCommit=${GIT_COMMIT} -X main.Version=${VERSION} -X main.BuildDate=${BUILD_DATE}" -o ./bin/eligibility ./cmd/eligibility/
 
-build-migrations:
-	docker build -t eligibility-migrations migrations
-
 up:
-	docker-compose up --build -d
-
-run:
-	@echo "Running service"
-	go run ./cmd/eligibility/
-
+	docker-compose up --build
+	
 update-deps:
 	dep ensure -update
 
 package: build-migrations
 	@echo "Building image ${BIN_NAME} ${VERSION} $(GIT_COMMIT)"
 	docker build --build-arg VERSION=${VERSION} --build-arg GIT_COMMIT=$(GIT_COMMIT) -t $(IMAGE_NAME):${VERSION} .
-
-add-migration:
-	touch ./migrations/sql/${TIMESTAMP}_$(name).sql
 
 clean:
 	@test ! -e bin/${BIN_NAME} || rm bin/${BIN_NAME}
@@ -73,3 +69,15 @@ test:
 
 down:
 	docker-compose down
+
+add-migration:
+	touch migrations/sql/$(shell expr $(LAST_MIGRATION) + 1 )_$(name).up.sql
+	touch migrations/sql/$(shell expr $(LAST_MIGRATION) + 1 )_$(name).down.sql
+
+build-migrations:
+	docker build -t backend-migrations migrations
+
+run-migrations: build-migrations
+	docker run --network host backend-migrations \
+	$(action) $(version) \
+	"mysql://$(DB_USER):$(DB_PASSWORD)@tcp($(DB_HOST):$(DB_PORT))/$(DB_NAME)"

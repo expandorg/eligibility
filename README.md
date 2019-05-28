@@ -34,3 +34,23 @@ To update vendors for built project, run:
 `make update-deps`
 
 ## Deploying
+
+## Database
+
+### Add a new migration
+
+```make add-migration name="migration_name"```
+
+For migration names be descriptive and start with verbs: `create_`, `drop_`, `add_`, etc.
+
+This will look at the latest migrated version (1, 2, 3) and creates 2 files with new version:
+
+`2_migration_name.up.sql` and `2_migration_name.down.sql`
+
+### Migrate
+
+You can migrate up and migrate down a version:
+
+`make run-migrations action="up" version="1"` and `make run-migrations action="down" version="1"`
+
+When you migrate up, you can see in the `schema_migrations` the last migrated version. When you migrate down, it deletes the the row in `schema_migrations`.

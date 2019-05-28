@@ -1,8 +1,10 @@
 version: '3'
 
 services:
-  eligibility:
-    restart: always
-    build: .
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_DATABASE: trivia_job
     ports:
-      - "3000:3000"
+      - '3306:3306'
