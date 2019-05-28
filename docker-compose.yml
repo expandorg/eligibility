@@ -5,6 +5,13 @@ services:
     image: mysql:5.7
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
-      MYSQL_DATABASE: trivia_job
+      MYSQL_DATABASE: eligibility
     ports:
       - '3306:3306'
+  
+  migration:
+    build:
+      context: ${GOPATH}/src/github.com/gemsorg/eligibility/migrations
+      dockerfile: Dockerfile
+    image: eligibility-migration
+    command: ['build']

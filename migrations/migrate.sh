@@ -4,6 +4,11 @@ action=$1
 mnumber=$2
 db=$3
 
+if [ "$action" = "build" ]; then
+  echo "building migrations"
+  exit 0
+fi
+
 if [ "$action" != "goto" ] && [ "$action" != "force" ] && [ "$action" != "up" ] && [ "$action" != "down" ]; then
   echo "operation must be 'goto' or 'force'"
   exit 1

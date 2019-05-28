@@ -75,9 +75,9 @@ add-migration:
 	touch migrations/sql/$(shell expr $(LAST_MIGRATION) + 1 )_$(name).down.sql
 
 build-migrations:
-	docker build -t backend-migrations migrations
+	docker build -t eligibility-migration migrations
 
-run-migrations: build-migrations
-	docker run --network host backend-migrations \
+run-migrations:
+	docker run --network host eligibility-migration \
 	$(action) $(version) \
 	"mysql://$(DB_USER):$(DB_PASSWORD)@tcp($(DB_HOST):$(DB_PORT))/$(DB_NAME)"
