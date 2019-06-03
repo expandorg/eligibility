@@ -12,10 +12,10 @@ type EligibilityService interface {
 }
 
 type service struct {
-	store *datastore.EligibilityStore
+	store datastore.Storage
 }
 
-func New(s *datastore.EligibilityStore) *service {
+func New(s datastore.Storage) *service {
 	return &service{
 		store: s,
 	}

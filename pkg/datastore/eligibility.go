@@ -1,38 +1,30 @@
 package datastore
 
 import (
-	"log"
-
 	"github.com/gemsorg/eligibility/pkg/filter"
-	"github.com/jmoiron/sqlx"
 )
 
-type EligibilityStore struct {
-	db *sqlx.DB
+type Driver interface {
+	Select(dest interface{}, query string, args ...interface{}) error
 }
 
-func NewEligibilityStore(db *sqlx.DB) *EligibilityStore {
+type Storage interface {
+	GetAllFilters() (filter.Filters, error)
+}
+
+type EligibilityStore struct {
+	DB Driver
+}
+
+func NewEligibilityStore(db Driver) *EligibilityStore {
 	return &EligibilityStore{
-		db: db,
+		DB: db,
 	}
 }
 
 func (s *EligibilityStore) GetAllFilters() (filter.Filters, error) {
-	var f filter.Filter
 	filters := filter.Filters{}
-	rows, err := s.db.Query("SELECT * FROM filters")
-	if err != nil {
-		log.Fatalf("Query: %v", err)
-		return nil, err
-	}
-	for rows.Next() {
-		err := rows.Scan(&f.ID, &f.Type, &f.Value)
-		if err != nil {
-			log.Fatalln(err)
-			return nil, err
-		}
-		filters = append(filters, f)
-	}
+	s.DB.Select(&filters, "SELECT * FROM filters")
 	return filters, nil
 }
 
