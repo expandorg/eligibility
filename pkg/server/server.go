@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gemsorg/eligibility/pkg/datastore"
-	"github.com/jmoiron/sqlx"
 
 	"github.com/gemsorg/eligibility/pkg/api/filtersfetcher"
 
@@ -13,7 +12,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func New(db *sqlx.DB) http.Handler {
+func New(db datastore.Driver) http.Handler {
 	r := mux.NewRouter()
 	ds := datastore.NewEligibilityStore(db)
 	s := service.New(ds)

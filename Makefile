@@ -64,7 +64,7 @@ deploy-dev: get-credentials-dev docker-build-dev push-dev
 deploy-prod: get-credentials-prod docker-build-prod push-prod
 	kubectl set image deployment/eligibility eligibility=gcr.io/gems-org/eligibility:$(VERSION)
 
-test:
+run-tests:
 	go test ./... -v -count=1
 
 down:

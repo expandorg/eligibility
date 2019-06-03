@@ -54,3 +54,12 @@ You can migrate up and migrate down a version:
 `make run-migrations action="up" version="1"` and `make run-migrations action="down" version="1"`
 
 When you migrate up, you can see in the `schema_migrations` the last migrated version. When you migrate down, it deletes the the row in `schema_migrations`.
+
+### Tests
+
+#### Unit tests
+We keep all unit tests close to the code and withing the same package. For example, if you want to test the service package, then you would add the tests in that folder marked `package service`.
+
+#### Functional
+
+We keep all functional tests in `tests/` folder. Create a new test file for every function. 
