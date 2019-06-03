@@ -15,3 +15,5 @@ services:
       dockerfile: Dockerfile
     image: eligibility-migration
     command: ['build']
+    depends_on:
+      - db

@@ -1,26 +1,30 @@
 package service
 
 import (
-	"fmt"
+	"github.com/gemsorg/eligibility/pkg/datastore"
 
-	"github.com/gemsorg/eligibility/log"
+	"github.com/gemsorg/eligibility/pkg/filter"
 )
 
 type EligibilityService interface {
 	Healthy() bool
+	GetFilters() (filter.Filters, error)
 }
 
 type service struct {
-	logger log.Logger
+	store datastore.Storage
 }
 
-func New(l log.Logger) *service {
+func New(s datastore.Storage) *service {
 	return &service{
-		logger: l,
+		store: s,
 	}
 }
 
 func (s *service) Healthy() bool {
-	s.logger.Log("health", fmt.Sprintf("I'm healthy!"))
 	return true
+}
+
+func (s *service) GetFilters() (filter.Filters, error) {
+	return s.store.GetAllFilters()
 }
