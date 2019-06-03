@@ -1,11 +1,21 @@
 package test
 
 import (
-	"github.com/gemsorg/eligibility/pkg/datastore"
+	"log"
+
+	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/jmoiron/sqlx"
 )
 
-func Setup() datastore.Driver {
-	return &fakeDB{}
+func Setup() *sqlx.DB {
+	mockDB, _, err := sqlmock.New()
+	defer mockDB.Close()
+	sqlxDB := sqlx.NewDb(mockDB, "sqlmock")
+
+	if err != nil {
+		log.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	return sqlxDB
 }
 
 type fakeDB struct{}

@@ -2,21 +2,19 @@ package datastore
 
 import (
 	"github.com/gemsorg/eligibility/pkg/filter"
+	"github.com/jmoiron/sqlx"
 )
-
-type Driver interface {
-	Select(dest interface{}, query string, args ...interface{}) error
-}
 
 type Storage interface {
 	GetAllFilters() (filter.Filters, error)
+	CreateFilter(filter.Filter) (filter.Filter, error)
 }
 
 type EligibilityStore struct {
-	DB Driver
+	DB *sqlx.DB
 }
 
-func NewEligibilityStore(db Driver) *EligibilityStore {
+func NewEligibilityStore(db *sqlx.DB) *EligibilityStore {
 	return &EligibilityStore{
 		DB: db,
 	}
@@ -26,6 +24,19 @@ func (s *EligibilityStore) GetAllFilters() (filter.Filters, error) {
 	filters := filter.Filters{}
 	s.DB.Select(&filters, "SELECT * FROM filters")
 	return filters, nil
+}
+
+func (s *EligibilityStore) CreateFilter(f filter.Filter) (filter.Filter, error) {
+	result, err := s.DB.Exec("INSERT INTO filters (type, value) VALUES (?, ?)", f.Type, f.Value)
+	if err != nil {
+		return filter.Filter{}, err
+	}
+	id, _ := result.LastInsertId()
+	if err != nil {
+		return filter.Filter{}, err
+	}
+	f.ID = uint64(id)
+	return f, nil
 }
 
 // func (s *EligibilityStore) GetJobFilters(jobID int)                                       {}
