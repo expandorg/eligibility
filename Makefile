@@ -35,7 +35,7 @@ help:
 	@echo
 
 
-build: build-service build-migrations
+build: build-service
 
 run: build 
 	bin/eligibility
@@ -81,3 +81,9 @@ run-migrations:
 	docker run --network host eligibility-migration \
 	$(action) $(version) \
 	"mysql://$(DB_USER):$(DB_PASSWORD)@tcp($(DB_HOST):$(DB_PORT))/$(DB_NAME)"
+
+db-seed:
+	@echo "Seeding db"
+	mkdir -p ./bin
+	go build -o ./bin/dbseed ./pkg/database/dbseed
+	./bin/dbseed

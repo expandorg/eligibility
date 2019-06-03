@@ -30,12 +30,39 @@
   version = "v0.4.0"
 
 [[projects]]
+  digest = "1:ec6f9bf5e274c833c911923c9193867f3f18788c461f76f05f62bb1510e0ae65"
+  name = "github.com/go-sql-driver/mysql"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "72cd26f257d44c1114970e19afddcd812016007e"
+  version = "v1.4.1"
+
+[[projects]]
   digest = "1:3af6be4fee7c08f81f13d36f04ffb63ad4b6b5aaba12cce96095c7c2863d4912"
   name = "github.com/gorilla/mux"
   packages = ["."]
   pruneopts = "UT"
   revision = "ed099d42384823742bba0bf9a72b53b55c9e2e38"
   version = "v1.7.2"
+
+[[projects]]
+  digest = "1:6c41d4f998a03b6604227ccad36edaed6126c397e5d78709ef4814a1145a6757"
+  name = "github.com/jmoiron/sqlx"
+  packages = [
+    ".",
+    "reflectx",
+  ]
+  pruneopts = "UT"
+  revision = "d161d7a76b5661016ad0b085869f77fd410f3e6a"
+  version = "v1.2.0"
+
+[[projects]]
+  digest = "1:ecd9aa82687cf31d1585d4ac61d0ba180e42e8a6182b85bd785fcca8dfeefc1b"
+  name = "github.com/joho/godotenv"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "23d116af351c84513e1946b527c88823e476be13"
+  version = "v1.3.0"
 
 [[projects]]
   branch = "master"
@@ -54,35 +81,32 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:ac83cf90d08b63ad5f7e020ef480d319ae890c208f8524622a2f3136e2686b02"
-  name = "github.com/stretchr/objx"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "477a77ecc69700c7cdeb1fa9e129548e1c1c393c"
-  version = "v0.1.1"
-
-[[projects]]
-  digest = "1:79c7e1dc6789fc4329a52a4f502cb71fb5d44eccbc665f6f7907c8cc06e48441"
+  digest = "1:972c2427413d41a1e06ca4897e8528e5a1622894050e2f527b38ddf0f343f759"
   name = "github.com/stretchr/testify"
-  packages = [
-    ".",
-    "assert",
-    "http",
-    "mock",
-  ]
+  packages = ["assert"]
   pruneopts = "UT"
   revision = "ffdc059bfe9ce6a4e144ba849dbedead332c6053"
   version = "v1.3.0"
+
+[[projects]]
+  digest = "1:c25289f43ac4a68d88b02245742347c94f1e108c534dda442188015ff80669b3"
+  name = "google.golang.org/appengine"
+  packages = ["cloudsql"]
+  pruneopts = "UT"
+  revision = "4c25cacc810c02874000e4f7071286a8e96b2515"
+  version = "v1.6.0"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/go-kit/kit/endpoint",
-    "github.com/go-kit/kit/log",
     "github.com/go-kit/kit/transport/http",
+    "github.com/go-sql-driver/mysql",
     "github.com/gorilla/mux",
-    "github.com/stretchr/testify",
+    "github.com/jmoiron/sqlx",
+    "github.com/joho/godotenv",
+    "github.com/stretchr/testify/assert",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
