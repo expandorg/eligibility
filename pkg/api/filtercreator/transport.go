@@ -1,9 +1,13 @@
-package filtersfetcher
+package filtercreator
 
 import (
 	"context"
 	"encoding/json"
 	"net/http"
+
+	"github.com/gemsorg/eligibility/pkg/apierror"
+
+	"github.com/gemsorg/eligibility/pkg/filter"
 
 	service "github.com/gemsorg/eligibility/pkg/service"
 	kithttp "github.com/go-kit/kit/transport/http"
@@ -11,7 +15,7 @@ import (
 
 func MakeHandler(s service.EligibilityService) http.Handler {
 	return kithttp.NewServer(
-		makeFiltersFetcherEndpoint(s),
+		makeCreateFilterEndpoint(s),
 		decodeFiltersRequest,
 		encodeResponse,
 	)
@@ -23,5 +27,14 @@ func encodeResponse(ctx context.Context, w http.ResponseWriter, response interfa
 }
 
 func decodeFiltersRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	return FiltersResponse{}, nil
+	var f filter.Filter
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&f)
+	if err != nil {
+		return nil, apierror.New(500, err.Error(), err)
+	}
+	if valid, err := validateRequest(f); !valid {
+		return nil, err
+	}
+	return f, nil
 }

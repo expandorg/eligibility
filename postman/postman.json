@@ -26,6 +26,46 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "create filter",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"type\": \"Gender\",\n\t\"value\": \"male\"\n}"
+				},
+				"url": {
+					"raw": "{{eligibilityUrl}}/filters",
+					"host": [
+						"{{eligibilityUrl}}"
+					],
+					"path": [
+						"filters"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "YOYO",
+							"disabled": true
+						},
+						{
+							"key": "v",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
