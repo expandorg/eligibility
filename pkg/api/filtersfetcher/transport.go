@@ -12,7 +12,7 @@ import (
 func MakeHandler(s service.EligibilityService) http.Handler {
 	return kithttp.NewServer(
 		makeFiltersFetcherEndpoint(s),
-		decodeFiltersResponse,
+		decodeFiltersRequest,
 		encodeResponse,
 	)
 }
@@ -22,6 +22,6 @@ func encodeResponse(ctx context.Context, w http.ResponseWriter, response interfa
 	return json.NewEncoder(w).Encode(response)
 }
 
-func decodeFiltersResponse(_ context.Context, r *http.Request) (interface{}, error) {
+func decodeFiltersRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	return FiltersResponse{}, nil
 }

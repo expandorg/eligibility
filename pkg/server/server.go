@@ -22,6 +22,6 @@ func New(db *sqlx.DB) http.Handler {
 	s := service.New(ds)
 	r.Handle("/_health", healthchecker.MakeHandler(s)).Methods("GET")
 	r.Handle("/filters", filtersfetcher.MakeHandler(s)).Methods("GET")
-	r.Handle("/filter", filtercreator.MakeHandler(s)).Methods("POST")
+	r.Handle("/filters", filtercreator.MakeHandler(s)).Methods("POST")
 	return r
 }

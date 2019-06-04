@@ -3,8 +3,9 @@ package filtercreator
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
+
+	"github.com/gemsorg/eligibility/pkg/apierror"
 
 	"github.com/gemsorg/eligibility/pkg/filter"
 
@@ -15,7 +16,7 @@ import (
 func MakeHandler(s service.EligibilityService) http.Handler {
 	return kithttp.NewServer(
 		makeCreateFilterEndpoint(s),
-		decodeFiltersResponse,
+		decodeFiltersRequest,
 		encodeResponse,
 	)
 }
@@ -25,12 +26,15 @@ func encodeResponse(ctx context.Context, w http.ResponseWriter, response interfa
 	return json.NewEncoder(w).Encode(response)
 }
 
-func decodeFiltersResponse(_ context.Context, r *http.Request) (interface{}, error) {
+func decodeFiltersRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var f filter.Filter
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&f)
 	if err != nil {
-		return nil, fmt.Errorf("missing params")
+		return nil, apierror.New(500, err.Error(), err)
+	}
+	if valid, err := validateRequest(f); !valid {
+		return nil, err
 	}
 	return f, nil
 }

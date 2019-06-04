@@ -31,7 +31,7 @@ func (s *EligibilityStore) CreateFilter(f filter.Filter) (filter.Filter, error) 
 	if err != nil {
 		return filter.Filter{}, err
 	}
-	id, _ := result.LastInsertId()
+	id, err := result.LastInsertId()
 	if err != nil {
 		return filter.Filter{}, err
 	}

@@ -9,7 +9,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var fakeFilters = filter.Filters{filter.Filter{1, "Gender", "male"}}
+var fakeFilter = filter.Filter{1, "Gender", "male"}
+var fakeFilters = filter.Filters{fakeFilter}
 
 type fakeDB struct{}
 
@@ -19,8 +20,8 @@ func (s *fakeStore) GetAllFilters() (filter.Filters, error) {
 	return fakeFilters, nil
 }
 
-func (s *fakeStore) CreateFilter(f filter.Filter) (bool, error) {
-	return true, nil
+func (s *fakeStore) CreateFilter(filter.Filter) (filter.Filter, error) {
+	return fakeFilter, nil
 }
 
 func (db *fakeDB) Select(dest interface{}, query string, args ...interface{}) error {
@@ -111,27 +112,29 @@ func Test_service_GetFilters(t *testing.T) {
 		})
 	}
 }
+
 func Test_service_CreateFilter(t *testing.T) {
 	ds := &fakeStore{}
+	requestFilter := fakeFilter
+	requestFilter.ID = 0
 	type fields struct {
 		store datastore.Storage
 	}
 	type args struct {
-		fType  string
-		fValue string
+		f filter.Filter
 	}
 	tests := []struct {
 		name    string
 		fields  fields
 		args    args
-		want    bool
+		want    filter.Filter
 		wantErr bool
 	}{
 		{
 			"it creates a new filter",
-			fields{store: ds},
-			args{"Gender", "male"},
-			true,
+			fields{ds},
+			args{requestFilter},
+			fakeFilter,
 			false,
 		},
 	}
@@ -140,12 +143,12 @@ func Test_service_CreateFilter(t *testing.T) {
 			s := &service{
 				store: tt.fields.store,
 			}
-			got, err := s.CreateFilter(tt.args.fType, tt.args.fValue)
+			got, err := s.CreateFilter(tt.args.f)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("service.CreateFilter() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if got != tt.want {
+			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("service.CreateFilter() = %v, want %v", got, tt.want)
 			}
 		})

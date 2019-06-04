@@ -2,8 +2,8 @@ package filtercreator
 
 import (
 	"context"
-	"log"
 
+	"github.com/gemsorg/eligibility/pkg/apierror"
 	"github.com/gemsorg/eligibility/pkg/filter"
 
 	service "github.com/gemsorg/eligibility/pkg/service"
@@ -16,9 +16,12 @@ func makeCreateFilterEndpoint(svc service.EligibilityService) endpoint.Endpoint 
 		req := request.(filter.Filter)
 		saved, err := svc.CreateFilter(req)
 		if err != nil {
-			log.Fatal("error", err.Error())
-			return nil, err
+			return nil, errorResponse(err)
 		}
 		return saved, nil
 	}
+}
+
+func errorResponse(err error) *apierror.APIError {
+	return apierror.New(500, err.Error(), err)
 }

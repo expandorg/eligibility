@@ -10,7 +10,7 @@ import (
 )
 
 func TestHealth(t *testing.T) {
-	db := Setup()
+	_, dbx, _ := Setup()
 
 	r, err := http.NewRequest("GET", "/_health", nil)
 
@@ -18,7 +18,7 @@ func TestHealth(t *testing.T) {
 		t.Fatal(err)
 	}
 	w := httptest.NewRecorder()
-	s := server.New(db)
+	s := server.New(dbx)
 	s.ServeHTTP(w, r)
 
 	resp := w.Result()
