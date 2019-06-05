@@ -9,13 +9,13 @@ if [ "$action" = "build" ]; then
   exit 0
 fi
 
-if [ "$action" != "goto" ] && [ "$action" != "force" ] && [ "$action" != "up" ] && [ "$action" != "down" ]; then
+if [ "$action" != "goto" ] && [ "$action" != "force" ]; then
   echo "operation must be 'goto' or 'force'"
   exit 1
 fi
 
-if [ "$mnumber" = "" ] && [ "$action" != "up" ]; then
-  echo "a migration number is required"
+if [ "$mnumber" = "" ]; then
+  echo "a migration version is required"
   exit 1
 fi
 

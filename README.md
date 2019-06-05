@@ -51,9 +51,9 @@ This will look at the latest migrated version (1, 2, 3) and creates 2 files with
 
 You can migrate up and migrate down a version:
 
-`make run-migrations action="up" version="1"` and `make run-migrations action="down" version="1"`
+`make run-migrations action="goto" version="1"`
 
-When you migrate up, you can see in the `schema_migrations` the last migrated version. When you migrate down, it deletes the the row in `schema_migrations`.
+When you migrate up, you can see in the `schema_migrations` the last migrated version. When you migrate down, it updates the the version column in `schema_migrations`.
 
 ### Tests
 

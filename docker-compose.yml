@@ -8,12 +8,3 @@ services:
       MYSQL_DATABASE: eligibility
     ports:
       - '3306:3306'
-  
-  migration:
-    build:
-      context: ${GOPATH}/src/github.com/gemsorg/eligibility/migrations
-      dockerfile: Dockerfile
-    image: eligibility-migration
-    command: ['build']
-    depends_on:
-      - db

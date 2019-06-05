@@ -77,7 +77,7 @@ add-migration:
 build-migrations:
 	docker build -t eligibility-migration migrations
 
-run-migrations:
+run-migrations: build-migrations
 	docker run --network host eligibility-migration \
 	$(action) $(version) \
 	"mysql://$(DB_USER):$(DB_PASSWORD)@tcp($(DB_HOST):$(DB_PORT))/$(DB_NAME)"
