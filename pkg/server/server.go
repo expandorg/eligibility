@@ -3,6 +3,8 @@ package server
 import (
 	"net/http"
 
+	"github.com/gemsorg/eligibility/pkg/api/workerprofilefetcher"
+
 	"github.com/gemsorg/eligibility/pkg/api/filtercreator"
 
 	"github.com/jmoiron/sqlx"
@@ -23,5 +25,6 @@ func New(db *sqlx.DB) http.Handler {
 	r.Handle("/_health", healthchecker.MakeHandler(s)).Methods("GET")
 	r.Handle("/filters", filtersfetcher.MakeHandler(s)).Methods("GET")
 	r.Handle("/filters", filtercreator.MakeHandler(s)).Methods("POST")
+	r.Handle("/profiles/{worker_id}", workerprofilefetcher.MakeHandler(s)).Methods("GET")
 	return r
 }

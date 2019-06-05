@@ -28,6 +28,30 @@
 			"response": []
 		},
 		{
+			"name": "worker profile",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{eligibilityUrl}}/profiles/:worker_id",
+					"host": [
+						"{{eligibilityUrl}}"
+					],
+					"path": [
+						"profiles",
+						":worker_id"
+					],
+					"variable": [
+						{
+							"key": "worker_id",
+							"value": "8"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "create filter",
 			"request": {
 				"method": "POST",
