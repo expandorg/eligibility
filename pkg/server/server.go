@@ -2,6 +2,9 @@ package server
 
 import (
 	"net/http"
+	"os"
+
+	"github.com/gemsorg/eligibility/pkg/api/workerprofilecreator"
 
 	"github.com/gemsorg/eligibility/pkg/api/workerprofilefetcher"
 
@@ -15,6 +18,7 @@ import (
 
 	"github.com/gemsorg/eligibility/pkg/api/healthchecker"
 	"github.com/gemsorg/eligibility/pkg/service"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -26,5 +30,7 @@ func New(db *sqlx.DB) http.Handler {
 	r.Handle("/filters", filtersfetcher.MakeHandler(s)).Methods("GET")
 	r.Handle("/filters", filtercreator.MakeHandler(s)).Methods("POST")
 	r.Handle("/profiles/{worker_id}", workerprofilefetcher.MakeHandler(s)).Methods("GET")
-	return r
+	r.Handle("/profiles/{worker_id}", workerprofilecreator.MakeHandler(s)).Methods("POST")
+	loggedRouter := handlers.CombinedLoggingHandler(os.Stdout, r)
+	return loggedRouter
 }
