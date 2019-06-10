@@ -1,15 +1,20 @@
 package datastore
 
 import (
+	"fmt"
+	"strconv"
+	"strings"
+
 	"github.com/gemsorg/eligibility/pkg/filter"
 	"github.com/gemsorg/eligibility/pkg/workerprofile"
 	"github.com/jmoiron/sqlx"
 )
 
 type Storage interface {
-	GetAllFilters() (filter.Filters, error)
+	GetAllFilters(ids []int) (filter.Filters, error)
 	CreateFilter(filter.Filter) (filter.Filter, error)
 	GetWorkerProfile(workerID string) (workerprofile.Profile, error)
+	CreateWorkerProfile(wp workerprofile.NewProfile) (workerprofile.Profile, error)
 }
 
 type EligibilityStore struct {
@@ -22,9 +27,13 @@ func NewEligibilityStore(db *sqlx.DB) *EligibilityStore {
 	}
 }
 
-func (s *EligibilityStore) GetAllFilters() (filter.Filters, error) {
+func (s *EligibilityStore) GetAllFilters(ids []int) (filter.Filters, error) {
 	filters := filter.Filters{}
-	s.DB.Select(&filters, "SELECT * FROM filters")
+	if len(ids) > 0 {
+		s.DB.Select(&filters, "SELECT * FROM filters WHERE id in(?)", ids)
+	} else {
+		s.DB.Select(&filters, "SELECT * FROM filters")
+	}
 	return filters, nil
 }
 
@@ -58,6 +67,55 @@ func (s *EligibilityStore) GetWorkerProfile(workerID string) (workerprofile.Prof
 	}
 	p.Attributes = fs.GroupByType()
 
+	return p, nil
+}
+
+func (s *EligibilityStore) CreateWorkerProfile(wp workerprofile.NewProfile) (workerprofile.Profile, error) {
+	fmt.Println(wp.Attributes)
+
+	tx, err := s.DB.Begin()
+	_, err = tx.Exec(
+		"REPLACE INTO worker_profiles (worker_id, birthdate, city, locality, country) VALUES (?, ?, ?, ?, ?)",
+		wp.WorkerID, wp.Birthdate, wp.City, wp.Locality, wp.Country)
+
+	if err != nil {
+		fmt.Println("profile replace", err)
+		tx.Rollback()
+		return workerprofile.Profile{}, err
+	}
+
+	_, err = tx.Exec("Delete FROM filters_workers WHERE worker_id=?", wp.WorkerID)
+
+	if err != nil {
+		fmt.Println("profile delete", err)
+		tx.Rollback()
+		return workerprofile.Profile{}, err
+	}
+
+	vals := []string{}
+
+	for _, id := range wp.Attributes {
+		vals = append(vals, fmt.Sprintf("(%d, %d)", wp.WorkerID, id))
+	}
+	attrQuery := "INSERT INTO filters_workers (worker_id, filter_id) VALUES" + strings.Join(vals, ",")
+	_, err = tx.Exec(attrQuery)
+
+	if err != nil {
+		fmt.Println("filters", err)
+		tx.Rollback()
+		return workerprofile.Profile{}, FilterNotFound{wp.Attributes}
+	}
+	err = tx.Commit()
+
+	if err != nil {
+		return workerprofile.Profile{}, err
+	}
+
+	p, err := s.GetWorkerProfile(strconv.FormatUint(wp.WorkerID, 10))
+
+	if err != nil {
+		return workerprofile.Profile{}, err
+	}
 	return p, nil
 }
 

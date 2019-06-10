@@ -22,7 +22,7 @@ type FakeDB struct{}
 
 type FakeStore struct{}
 
-func (s *FakeStore) GetAllFilters() (filter.Filters, error) {
+func (s *FakeStore) GetAllFilters(ids []int) (filter.Filters, error) {
 	return FakeFilters, nil
 }
 
@@ -34,6 +34,10 @@ func (s *FakeStore) GetWorkerProfile(workerID string) (workerprofile.Profile, er
 	if workerID == "nonExistantID" {
 		return EmptyProfile, nil
 	}
+	return FakeProfile, nil
+}
+
+func (s *FakeStore) CreateWorkerProfile(wp workerprofile.NewProfile) (workerprofile.Profile, error) {
 	return FakeProfile, nil
 }
 

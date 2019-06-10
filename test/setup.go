@@ -9,6 +9,6 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-func Setup() (*sql.DB, *sqlx.DB, {sqlmock.Sqlmock}) {
+func Setup() (*sql.DB, *sqlx.DB, sqlmock.Sqlmock) {
 	return mock.Mysql()
 }

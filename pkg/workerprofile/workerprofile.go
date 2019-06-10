@@ -13,3 +13,12 @@ type Profile struct {
 	Country    string                `json:"country"`
 	Attributes filter.GroupedFilters `json:"attributes"`
 }
+
+type NewProfile struct {
+	WorkerID   uint64 `json:"worker_id"`
+	Birthdate  string `json:"birthdate"`
+	City       string `json:"city"`
+	Locality   string `json:"locality"`
+	Country    string `json:"country"`
+	Attributes []int  `json:"attributes"`
+}
