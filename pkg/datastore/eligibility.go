@@ -53,7 +53,7 @@ func (s *EligibilityStore) CreateFilter(f filter.Filter) (filter.Filter, error) 
 func (s *EligibilityStore) GetWorkerProfile(workerID string) (workerprofile.Profile, error) {
 	fs := filter.Filters{}
 	attr := filter.GroupedFilters{}
-	p := workerprofile.Profile{Attributes: attr}
+	p := workerprofile.Profile{State: workerprofile.NOTFILLED, Attributes: attr}
 
 	err := s.DB.Get(&p, "SELECT * FROM worker_profiles WHERE worker_id=? LIMIT 1", workerID)
 
@@ -73,8 +73,8 @@ func (s *EligibilityStore) GetWorkerProfile(workerID string) (workerprofile.Prof
 func (s *EligibilityStore) CreateWorkerProfile(wp workerprofile.NewProfile) (workerprofile.Profile, error) {
 	tx, err := s.DB.Begin()
 	_, err = tx.Exec(
-		"REPLACE INTO worker_profiles (worker_id, birthdate, city, locality, country) VALUES (?, ?, ?, ?, ?)",
-		wp.WorkerID, wp.Birthdate, wp.City, wp.Locality, wp.Country)
+		"REPLACE INTO worker_profiles (worker_id, birthdate, city, locality, country, state) VALUES (?, ?, ?, ?, ?, ?)",
+		wp.WorkerID, wp.Birthdate, wp.City, wp.Locality, wp.Country, wp.State)
 
 	if err != nil {
 		tx.Rollback()

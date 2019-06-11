@@ -11,7 +11,7 @@ import (
 
 func TestWorkerProfileFetcher(t *testing.T) {
 	_, dbx, _ := Setup()
-	r, err := http.NewRequest("GET", "/profiles/1", nil)
+	r, err := http.NewRequest("GET", "/workers/1/profiles", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -20,5 +20,5 @@ func TestWorkerProfileFetcher(t *testing.T) {
 	s.ServeHTTP(w, r)
 
 	resp := w.Result()
-	assert.Equal(t, resp.StatusCode, http.StatusOK, "Status should be ok")
+	assert.Equal(t, http.StatusOK, resp.StatusCode, "Status should be ok")
 }

@@ -29,8 +29,8 @@ func New(db *sqlx.DB) http.Handler {
 	r.Handle("/_health", healthchecker.MakeHandler(s)).Methods("GET")
 	r.Handle("/filters", filtersfetcher.MakeHandler(s)).Methods("GET")
 	r.Handle("/filters", filtercreator.MakeHandler(s)).Methods("POST")
-	r.Handle("/profiles/{worker_id}", workerprofilefetcher.MakeHandler(s)).Methods("GET")
-	r.Handle("/profiles/{worker_id}", workerprofilecreator.MakeHandler(s)).Methods("POST")
+	r.Handle("/workers/{worker_id}/profiles", workerprofilefetcher.MakeHandler(s)).Methods("GET")
+	r.Handle("/workers/{worker_id}/profiles", workerprofilecreator.MakeHandler(s)).Methods("POST")
 	loggedRouter := handlers.CombinedLoggingHandler(os.Stdout, r)
 	return loggedRouter
 }

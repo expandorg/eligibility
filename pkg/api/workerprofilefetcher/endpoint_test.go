@@ -12,7 +12,7 @@ import (
 )
 
 func TestWorkerProfileResponse(t *testing.T) {
-	want := `{"id":58,"worker_id":8,"birthdate":"1982-08-05T00:00:00Z","city":"Lake Verlashire","locality":"District of Columbia","country":"Netherlands","attributes":{"Gender":[{"id":1,"type":"Gender","value":"male"}]}}`
+	want := `{"id":58,"worker_id":8,"birthdate":"1982-08-05T00:00:00Z","city":"Lake Verlashire","locality":"District of Columbia","country":"Netherlands","state":"partial","attributes":{"Gender":[{"id":1,"type":"Gender","value":"male"}]}}`
 	attr := filter.Filters{filter.Filter{1, "Gender", "male"}}
 	profile := workerprofile.Profile{
 		ID:         58,
@@ -21,6 +21,7 @@ func TestWorkerProfileResponse(t *testing.T) {
 		City:       "Lake Verlashire",
 		Locality:   "District of Columbia",
 		Country:    "Netherlands",
+		State:      "partial",
 		Attributes: attr.GroupByType(),
 	}
 	actual, _ := json.Marshal(profile)
