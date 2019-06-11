@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gemsorg/eligibility/pkg/filter"
 	service "github.com/gemsorg/eligibility/pkg/service"
 	kithttp "github.com/go-kit/kit/transport/http"
 )
@@ -23,5 +24,5 @@ func encodeResponse(ctx context.Context, w http.ResponseWriter, response interfa
 }
 
 func decodeFiltersRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	return FiltersResponse{}, nil
+	return filter.GroupedFilters{}, nil
 }

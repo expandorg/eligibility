@@ -22,10 +22,6 @@ func makeCreateWorkerProfileEndpoint(svc service.EligibilityService) endpoint.En
 	}
 }
 
-type WorkerProfileResponse struct {
-	Profile workerprofile.Profile `json:"profile"`
-}
-
 func errorResponse(err error) *apierror.APIError {
 	return apierror.New(500, err.Error(), err)
 }

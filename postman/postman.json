@@ -11,7 +11,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "{{eligibilityUrl}}/_health",
+					"host": [
+						"{{eligibilityUrl}}"
+					],
+					"path": [
+						"_health"
+					]
 				}
 			},
 			"response": []
@@ -22,7 +28,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "{{eligibilityUrl}}/filters",
+					"host": [
+						"{{eligibilityUrl}}"
+					],
+					"path": [
+						"filters"
+					]
 				}
 			},
 			"response": []
@@ -65,7 +77,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"type\": \"Gender\",\n\t\"value\": \"male\"\n}"
+					"raw": "{\n\t\"type\": \"Education\",\n\t\"value\": \"BS\"\n}"
 				},
 				"url": {
 					"raw": "{{eligibilityUrl}}/filters",
@@ -85,6 +97,53 @@
 							"key": "v",
 							"value": "",
 							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create worker profile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"worker_id\": 8,\n    \"birthdate\": \"1980-08-05\",\n    \"city\": \"Lake\",\n    \"locality\": \"District\",\n    \"country\": \"Netherlands\",\n    \"attributes\": [\n       23,\n\t   22\n    ]\n}"
+				},
+				"url": {
+					"raw": "{{eligibilityUrl}}/profiles/:worker_id",
+					"host": [
+						"{{eligibilityUrl}}"
+					],
+					"path": [
+						"profiles",
+						":worker_id"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "YOYO",
+							"disabled": true
+						},
+						{
+							"key": "v",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "worker_id",
+							"value": "8"
 						}
 					]
 				}

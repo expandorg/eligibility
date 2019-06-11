@@ -10,9 +10,9 @@ import (
 )
 
 func TestFiltersResponse(t *testing.T) {
-	want := `{"filters":{"Gender":[{"id":1,"type":"Gender","value":"male"}]}}`
+	want := `{"Gender":[{"id":1,"type":"Gender","value":"male"}]}`
 	fitlers := filter.Filters{filter.Filter{1, "Gender", "male"}}
 	grouped := fitlers.GroupByType()
-	actual, _ := json.Marshal(FiltersResponse{grouped})
+	actual, _ := json.Marshal(grouped)
 	assert.Equal(t, want, string(actual))
 }
