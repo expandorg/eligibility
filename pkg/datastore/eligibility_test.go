@@ -6,7 +6,7 @@ import (
 	"github.com/gemsorg/eligibility/pkg/filter"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/gemsorg/eligibility/mock"
+	"github.com/gemsorg/eligibility/pkg/mock"
 	"github.com/gemsorg/eligibility/pkg/workerprofile"
 	"github.com/jmoiron/sqlx"
 )

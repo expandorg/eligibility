@@ -3,7 +3,7 @@ package test
 import (
 	"database/sql"
 
-	"github.com/gemsorg/eligibility/mock"
+	"github.com/gemsorg/eligibility/pkg/mock"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/jmoiron/sqlx"

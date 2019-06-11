@@ -4,9 +4,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/gemsorg/eligibility/mock"
 	"github.com/gemsorg/eligibility/pkg/datastore"
 	"github.com/gemsorg/eligibility/pkg/filter"
+	"github.com/gemsorg/eligibility/pkg/mock"
 	"github.com/gemsorg/eligibility/pkg/workerprofile"
 	"github.com/stretchr/testify/assert"
 )
