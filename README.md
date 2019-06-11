@@ -15,10 +15,14 @@ Clone the repository with:
 
 `go get -u github.com/gemsorg/eligibility`
 
-OR create a directory `$GOPATH/src/github/gemsorg` and execute: git clone git@github.com:gemsorg/eligibility.git 
+OR 
+
+create a directory `$GOPATH/src/github/gemsorg` and execute: git clone git@github.com:gemsorg/eligibility.git 
 
 Run the project dependencies (db, etc.) with `make up`
+
 Run the latest migration with `make migrate-latest`
+
 Run the project with `make run`
 
 ### Dependencies
