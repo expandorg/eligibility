@@ -45,18 +45,19 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{eligibilityUrl}}/profiles/:worker_id",
+					"raw": "{{eligibilityUrl}}/workers/:worker_id/profiles",
 					"host": [
 						"{{eligibilityUrl}}"
 					],
 					"path": [
-						"profiles",
-						":worker_id"
+						"workers",
+						":worker_id",
+						"profiles"
 					],
 					"variable": [
 						{
 							"key": "worker_id",
-							"value": "8"
+							"value": "1"
 						}
 					]
 				}
@@ -117,16 +118,17 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"worker_id\": 8,\n    \"birthdate\": \"1980-08-05\",\n    \"city\": \"Lake\",\n    \"locality\": \"District\",\n    \"country\": \"Netherlands\",\n    \"attributes\": [\n       23,\n\t   22\n    ]\n}"
+					"raw": "{\n    \"worker_id\": 8,\n    \"birthdate\": \"1986-01-02\",\n    \"city\": \"Lake Verlashire\",\n    \"locality\": \"District\",\n    \"country\": \"Netherlands\",\n    \"state\": \"partial\",\n    \"attributes\": [\n      23\n    ]\n}"
 				},
 				"url": {
-					"raw": "{{eligibilityUrl}}/profiles/:worker_id",
+					"raw": "{{eligibilityUrl}}/workers/:worker_id/profiles",
 					"host": [
 						"{{eligibilityUrl}}"
 					],
 					"path": [
-						"profiles",
-						":worker_id"
+						"workers",
+						":worker_id",
+						"profiles"
 					],
 					"query": [
 						{
