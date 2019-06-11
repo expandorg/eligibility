@@ -17,17 +17,17 @@ Clone the repository with:
 
 OR create a directory `$GOPATH/src/github/gemsorg` and execute: git clone git@github.com:gemsorg/eligibility.git 
 
-Build the project with `make build`
+Run the project dependencies (db, etc.) with `make up`
+Run the latest migration with `make migrate-latest`
+Run the project with `make run`
 
-Run the project with `make up`
+### Dependencies
 
-To see logs running on the server run 
-
-`docker-compose logs -f`
+We use `dep` to manage our dependencies.
 
 To add a new vendor, use: 
 
-`go get ABC`
+`deps ensure -add DEPENDENCY`
 
 To update vendors for built project, run:
 
@@ -49,17 +49,24 @@ This will look at the latest migrated version (1, 2, 3) and creates 2 files with
 
 ### Migrate
 
+You can migrate to latest:
+
+```make migrate-latest```
+
+OR 
+
 You can migrate up and migrate down a version:
 
-`make run-migrations action="goto" version="1"`
+```make run-migrations action="goto" version="1"```
 
 When you migrate up, you can see in the `schema_migrations` the last migrated version. When you migrate down, it updates the the version column in `schema_migrations`.
 
-### Tests
+## Tests
+```make run-tests```
 
-#### Unit tests
+### Unit tests
 We keep all unit tests close to the code and withing the same package. For example, if you want to test the service package, then you would add the tests in that folder marked `package service`.
 
-#### Functional
+### Functional
 
 We keep all functional tests in `tests/` folder. Create a new test file for every function. 
