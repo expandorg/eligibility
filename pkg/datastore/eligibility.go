@@ -71,15 +71,12 @@ func (s *EligibilityStore) GetWorkerProfile(workerID string) (workerprofile.Prof
 }
 
 func (s *EligibilityStore) CreateWorkerProfile(wp workerprofile.NewProfile) (workerprofile.Profile, error) {
-	fmt.Println(wp.Attributes)
-
 	tx, err := s.DB.Begin()
 	_, err = tx.Exec(
 		"REPLACE INTO worker_profiles (worker_id, birthdate, city, locality, country) VALUES (?, ?, ?, ?, ?)",
 		wp.WorkerID, wp.Birthdate, wp.City, wp.Locality, wp.Country)
 
 	if err != nil {
-		fmt.Println("profile replace", err)
 		tx.Rollback()
 		return workerprofile.Profile{}, err
 	}
@@ -87,24 +84,25 @@ func (s *EligibilityStore) CreateWorkerProfile(wp workerprofile.NewProfile) (wor
 	_, err = tx.Exec("Delete FROM filters_workers WHERE worker_id=?", wp.WorkerID)
 
 	if err != nil {
-		fmt.Println("profile delete", err)
 		tx.Rollback()
 		return workerprofile.Profile{}, err
 	}
 
-	vals := []string{}
+	if len(wp.Attributes) > 0 {
+		vals := []string{}
 
-	for _, id := range wp.Attributes {
-		vals = append(vals, fmt.Sprintf("(%d, %d)", wp.WorkerID, id))
-	}
-	attrQuery := "INSERT INTO filters_workers (worker_id, filter_id) VALUES" + strings.Join(vals, ",")
-	_, err = tx.Exec(attrQuery)
+		for _, id := range wp.Attributes {
+			vals = append(vals, fmt.Sprintf("(%d, %d)", wp.WorkerID, id))
+		}
+		attrQuery := "INSERT INTO filters_workers (worker_id, filter_id) VALUES" + strings.Join(vals, ",")
+		_, err = tx.Exec(attrQuery)
 
-	if err != nil {
-		fmt.Println("filters", err)
-		tx.Rollback()
-		return workerprofile.Profile{}, FilterNotFound{wp.Attributes}
+		if err != nil {
+			tx.Rollback()
+			return workerprofile.Profile{}, FilterNotFound{wp.Attributes}
+		}
 	}
+
 	err = tx.Commit()
 
 	if err != nil {
