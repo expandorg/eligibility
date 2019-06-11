@@ -6,27 +6,11 @@ import (
 
 	"github.com/gemsorg/eligibility/pkg/datastore"
 	"github.com/gemsorg/eligibility/pkg/filter"
+	"github.com/gemsorg/eligibility/pkg/mock"
+	"github.com/gemsorg/eligibility/pkg/workerprofile"
 	"github.com/stretchr/testify/assert"
 )
 
-var fakeFilter = filter.Filter{1, "Gender", "male"}
-var fakeFilters = filter.Filters{fakeFilter}
-
-type fakeDB struct{}
-
-type fakeStore struct{}
-
-func (s *fakeStore) GetAllFilters() (filter.Filters, error) {
-	return fakeFilters, nil
-}
-
-func (s *fakeStore) CreateFilter(filter.Filter) (filter.Filter, error) {
-	return fakeFilter, nil
-}
-
-func (db *fakeDB) Select(dest interface{}, query string, args ...interface{}) error {
-	return nil
-}
 func TestNew(t *testing.T) {
 	ds := &datastore.EligibilityStore{}
 	type args struct {
@@ -79,7 +63,7 @@ func Test_service_Healthy(t *testing.T) {
 }
 
 func Test_service_GetFilters(t *testing.T) {
-	ds := &fakeStore{}
+	ds := &mock.FakeStore{}
 	type fields struct {
 		store datastore.Storage
 	}
@@ -92,7 +76,7 @@ func Test_service_GetFilters(t *testing.T) {
 		{
 			"it gets all filters from store",
 			fields{store: ds},
-			fakeFilters,
+			mock.FakeFilters,
 			false,
 		},
 	}
@@ -114,8 +98,8 @@ func Test_service_GetFilters(t *testing.T) {
 }
 
 func Test_service_CreateFilter(t *testing.T) {
-	ds := &fakeStore{}
-	requestFilter := fakeFilter
+	ds := &mock.FakeStore{}
+	requestFilter := mock.FakeFilter
 	requestFilter.ID = 0
 	type fields struct {
 		store datastore.Storage
@@ -134,7 +118,7 @@ func Test_service_CreateFilter(t *testing.T) {
 			"it creates a new filter",
 			fields{ds},
 			args{requestFilter},
-			fakeFilter,
+			mock.FakeFilter,
 			false,
 		},
 	}
@@ -150,6 +134,53 @@ func Test_service_CreateFilter(t *testing.T) {
 			}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("service.CreateFilter() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_service_GetWorkerProfile(t *testing.T) {
+	ds := &mock.FakeStore{}
+	type fields struct {
+		store datastore.Storage
+	}
+	type args struct {
+		workerID string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    workerprofile.Profile
+		wantErr bool
+	}{
+		{
+			"it returns the worker's profile",
+			fields{ds},
+			args{"1"},
+			mock.FakeProfile,
+			false,
+		},
+		{
+			"it returns an empty profile if worker_id not found",
+			fields{ds},
+			args{"nonExistantID"},
+			mock.EmptyProfile,
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &service{
+				store: tt.fields.store,
+			}
+			got, err := s.GetWorkerProfile(tt.args.workerID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("service.GetWorkerProfile() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("service.GetWorkerProfile() = %v, want %v", got, tt.want)
 			}
 		})
 	}

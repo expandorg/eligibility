@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/gemsorg/eligibility/pkg/datastore"
+	"github.com/gemsorg/eligibility/pkg/workerprofile"
 
 	"github.com/gemsorg/eligibility/pkg/filter"
 )
@@ -10,6 +11,8 @@ type EligibilityService interface {
 	Healthy() bool
 	GetFilters() (filter.Filters, error)
 	CreateFilter(filter.Filter) (filter.Filter, error)
+	GetWorkerProfile(workerID string) (workerprofile.Profile, error)
+	CreateWorkerProfile(workerprofile.NewProfile) (workerprofile.Profile, error)
 }
 
 type service struct {
@@ -27,19 +30,26 @@ func (s *service) Healthy() bool {
 }
 
 func (s *service) GetFilters() (filter.Filters, error) {
-	return s.store.GetAllFilters()
+	return s.store.GetAllFilters(([]int{}))
 }
 
 func (s *service) CreateFilter(f filter.Filter) (filter.Filter, error) {
 	return s.store.CreateFilter(f)
 }
 
-// CreateFilter(type)
+func (s *service) GetWorkerProfile(workerID string) (workerprofile.Profile, error) {
+	return s.store.GetWorkerProfile(workerID)
+}
+
+func (s *service) CreateWorkerProfile(wp workerprofile.NewProfile) (workerprofile.Profile, error) {
+	return s.store.CreateWorkerProfile(wp)
+}
+
+// GetWorkerProfile(workerID int)
+// CreateWorkerProfile(workerID int, profile []Profile)
 // GetJobFilters(jobID int)
 // GetJobWhiteList(jobID int)
 // CreateJobFilters(jobID int, filters []Filter, profile Profile)
 // GetEligibleWorkerCount(filters []Filter)
-// GetWorkerProfile(workerID int)
-// CreateWorkerProfile(workerID int, profile []Profile)
 // GetEligibleJobsForWorker(workerID int)
 // IsWorkerEligibleForJob(workerID int, jobID int)

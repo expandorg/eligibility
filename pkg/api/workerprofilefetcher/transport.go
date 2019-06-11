@@ -1,19 +1,20 @@
-package filtersfetcher
+package workerprofilefetcher
 
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
-	"github.com/gemsorg/eligibility/pkg/filter"
 	service "github.com/gemsorg/eligibility/pkg/service"
 	kithttp "github.com/go-kit/kit/transport/http"
+	"github.com/gorilla/mux"
 )
 
 func MakeHandler(s service.EligibilityService) http.Handler {
 	return kithttp.NewServer(
-		makeFiltersFetcherEndpoint(s),
-		decodeFiltersRequest,
+		makeWorkerProfileFetcherEndpoint(s),
+		decodeWorkerProfileRequest,
 		encodeResponse,
 	)
 }
@@ -23,6 +24,12 @@ func encodeResponse(ctx context.Context, w http.ResponseWriter, response interfa
 	return json.NewEncoder(w).Encode(response)
 }
 
-func decodeFiltersRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	return filter.GroupedFilters{}, nil
+func decodeWorkerProfileRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	vars := mux.Vars(r)
+	var ok bool
+	workerID, ok := vars["worker_id"]
+	if !ok {
+		return nil, fmt.Errorf("missing worker_id parameter")
+	}
+	return WorkerProfileRequest{WorkerID: workerID}, nil
 }

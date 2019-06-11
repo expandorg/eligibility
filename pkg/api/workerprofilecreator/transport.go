@@ -1,19 +1,22 @@
-package filtersfetcher
+package workerprofilecreator
 
 import (
 	"context"
 	"encoding/json"
 	"net/http"
 
-	"github.com/gemsorg/eligibility/pkg/filter"
+	"github.com/gemsorg/eligibility/pkg/workerprofile"
+
+	"github.com/gemsorg/eligibility/pkg/apierror"
+
 	service "github.com/gemsorg/eligibility/pkg/service"
 	kithttp "github.com/go-kit/kit/transport/http"
 )
 
 func MakeHandler(s service.EligibilityService) http.Handler {
 	return kithttp.NewServer(
-		makeFiltersFetcherEndpoint(s),
-		decodeFiltersRequest,
+		makeCreateWorkerProfileEndpoint(s),
+		decodeNewWorkerProfileRequest,
 		encodeResponse,
 	)
 }
@@ -23,6 +26,12 @@ func encodeResponse(ctx context.Context, w http.ResponseWriter, response interfa
 	return json.NewEncoder(w).Encode(response)
 }
 
-func decodeFiltersRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	return filter.GroupedFilters{}, nil
+func decodeNewWorkerProfileRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	var p workerprofile.NewProfile
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&p)
+	if err != nil {
+		return nil, apierror.New(500, err.Error(), err)
+	}
+	return p, nil
 }

@@ -11,7 +11,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "{{eligibilityUrl}}/_health",
+					"host": [
+						"{{eligibilityUrl}}"
+					],
+					"path": [
+						"_health"
+					]
 				}
 			},
 			"response": []
@@ -22,7 +28,38 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "{{eligibilityUrl}}/filters",
+					"host": [
+						"{{eligibilityUrl}}"
+					],
+					"path": [
+						"filters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "worker profile",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{eligibilityUrl}}/workers/:worker_id/profiles",
+					"host": [
+						"{{eligibilityUrl}}"
+					],
+					"path": [
+						"workers",
+						":worker_id",
+						"profiles"
+					],
+					"variable": [
+						{
+							"key": "worker_id",
+							"value": "1"
+						}
+					]
 				}
 			},
 			"response": []
@@ -41,7 +78,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"type\": \"Gender\",\n\t\"value\": \"male\"\n}"
+					"raw": "{\n\t\"type\": \"Education\",\n\t\"value\": \"BS\"\n}"
 				},
 				"url": {
 					"raw": "{{eligibilityUrl}}/filters",
@@ -61,6 +98,54 @@
 							"key": "v",
 							"value": "",
 							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create worker profile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"worker_id\": 8,\n    \"birthdate\": \"1986-01-02\",\n    \"city\": \"Lake Verlashire\",\n    \"locality\": \"District\",\n    \"country\": \"Netherlands\",\n    \"state\": \"partial\",\n    \"attributes\": [\n      23\n    ]\n}"
+				},
+				"url": {
+					"raw": "{{eligibilityUrl}}/workers/:worker_id/profiles",
+					"host": [
+						"{{eligibilityUrl}}"
+					],
+					"path": [
+						"workers",
+						":worker_id",
+						"profiles"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "YOYO",
+							"disabled": true
+						},
+						{
+							"key": "v",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "worker_id",
+							"value": "8"
 						}
 					]
 				}
