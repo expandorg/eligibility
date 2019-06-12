@@ -9,6 +9,8 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+const bearer = "Bearer 123"
+
 func Setup() (*sql.DB, *sqlx.DB, sqlmock.Sqlmock) {
 	return mock.Mysql()
 }

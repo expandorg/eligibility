@@ -12,6 +12,7 @@ import (
 func TestWorkerProfileFetcher(t *testing.T) {
 	_, dbx, _ := Setup()
 	r, err := http.NewRequest("GET", "/workers/1/profiles", nil)
+	r.Header.Add("Authorization", bearer)
 	if err != nil {
 		t.Fatal(err)
 	}

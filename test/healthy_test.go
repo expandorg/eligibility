@@ -13,7 +13,7 @@ func TestHealth(t *testing.T) {
 	_, dbx, _ := Setup()
 
 	r, err := http.NewRequest("GET", "/_health", nil)
-
+	r.Header.Add("Authorization", bearer)
 	if err != nil {
 		t.Fatal(err)
 	}

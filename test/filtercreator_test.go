@@ -51,6 +51,7 @@ func TestFiltersCreator(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 
 			r, err := http.NewRequest("POST", "/filters", bytes.NewBuffer(tt.params))
+			r.Header.Add("Authorization", bearer)
 			if err != nil {
 				t.Fatal(err)
 			}
