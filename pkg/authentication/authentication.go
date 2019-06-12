@@ -4,14 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-)
-
-var (
-	JwtSecret = []byte("F2AD37825335F43B3170B2C52A4F75C902D58581D2D8F31479F9D13F2253F794")
 )
 
 const (
@@ -72,7 +69,7 @@ func parser(token *jwt.Token) (interface{}, error) {
 	if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 		return nil, errors.New("Unexpected signing method")
 	}
-	return JwtSecret, nil
+	return []byte(os.Getenv("JWT_SECRET")), nil
 }
 
 func parseJWT(tokenString string) (jwt.MapClaims, error) {
