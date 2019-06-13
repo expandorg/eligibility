@@ -4,7 +4,11 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
+
+	"github.com/gemsorg/eligibility/pkg/mock"
+	"github.com/stretchr/testify/assert"
 )
 
 func mockHeadRequest(t *testing.T, statusCode int) *httptest.Server {
@@ -21,5 +25,37 @@ func TestExtractAuthorizationHeaderFromContext(t *testing.T) {
 	actualToken, _ := extractAuthorizationHeaderFromContext(ctx)
 	if actualToken != "123" {
 		t.Fatalf("Expected token: %q, but got: %q", "123", actualToken)
+	}
+}
+
+func TestParseAuthData(t *testing.T) {
+	os.Setenv("JWT_SECRET", mock.JWT_SECRET)
+	ctx := mock.MockContext{}
+	type args struct {
+		ctx context.Context
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    AuthData
+		wantErr bool
+	}{
+		{
+			"it returns auth data",
+			args{ctx},
+			AuthData{1591960106, "http://localhost:3000", 1},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := ParseAuthData(tt.args.ctx)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ParseAuthData() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			assert.Equal(t, tt.want.Issuer, got.Issuer)
+			assert.Equal(t, tt.want.UserID, got.UserID)
+		})
 	}
 }

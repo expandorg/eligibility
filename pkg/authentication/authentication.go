@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -16,37 +15,33 @@ const (
 	ExpirationKey            = "exp"
 	UserIDKey                = "uid"
 	IssuerKey                = "iss"
-	JWTIDKey                 = "jti"
-	AudienceKey              = "aud"
-	SessionDuration          = 8760 * time.Hour // 1 year
 )
 
-func ParseSessionJWT(ctx context.Context) (uint64, error) {
+type AuthData struct {
+	Expiration int64
+	Issuer     string
+	UserID     uint64
+}
+
+func ParseAuthData(ctx context.Context) (AuthData, error) {
 	tokenString, _ := extractAuthorizationHeaderFromContext(ctx)
 	claims, err := parseJWT(tokenString)
+
 	if err != nil {
-		return 0, err
+		return AuthData{}, err
 	}
 
-	// issuer := claims[IssuerKey].(string)
-	// if issuer != os.Getenv("FRONTEND_ADDRESS") {
-	// 	return 0, errors.New("Incorrect issuer")
-	// }
-
-	expiration := int64(claims[ExpirationKey].(float64))
-	if expiration < time.Now().Unix() {
-		return 0, errors.New("Authorization token expired")
-	}
-
-	fmt.Println(claims)
-
-	userID := uint64(claims[UserIDKey].(float64))
-	return userID, nil
+	return AuthData{
+		int64(claims[ExpirationKey].(float64)),
+		claims[IssuerKey].(string),
+		uint64(claims[UserIDKey].(float64)),
+	}, nil
 }
 
 // extractAuthorizationHeaderFromContext finds and extracts the Authorization JWT from a context.
 func extractAuthorizationHeaderFromContext(ctx context.Context) (string, error) {
 	jwt, err := extractJWTFromContext(ctx)
+
 	jwt = strings.Split(jwt, "Bearer ")[1]
 
 	if err != nil {
@@ -59,6 +54,7 @@ func extractAuthorizationHeaderFromContext(ctx context.Context) (string, error) 
 func extractJWTFromContext(ctx context.Context) (string, error) {
 	errMissingAuthorizationHeader := fmt.Errorf("missing %q header", authenticationHeaderName)
 	t, err := GetAuthFromContext(ctx)
+
 	if len(t) == 0 || err != nil {
 		return "", errMissingAuthorizationHeader
 	}
