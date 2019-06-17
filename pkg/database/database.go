@@ -12,15 +12,16 @@ import (
 const connMaxLifetime = time.Second * 5
 
 func Connect() (*sqlx.DB, error) {
-	host := os.Getenv("DB_HOST")
-	name := os.Getenv("DB_NAME")
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
+	host := os.Getenv("ELIG_DB_HOST")
+	port := os.Getenv("ELIG_DB_PORT")
+	name := os.Getenv("ELIG_DB_NAME")
+	user := os.Getenv("ELIG_DB_USER")
+	password := os.Getenv("ELIG_DB_PASSWORD")
 	if password != "" {
 		password = ":" + password
 	}
 
-	connection := fmt.Sprintf(`%s%s@tcp([%s]:3306)/%s?parseTime=true`, user, password, host, name)
+	connection := fmt.Sprintf(`%s%s@tcp([%s]:%s)/%s?parseTime=true`, user, password, host, port, name)
 	db, err := sqlx.Open("mysql", connection)
 	if err != nil {
 		return nil, err
