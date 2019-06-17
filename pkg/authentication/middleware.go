@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"strings"
+	"time"
 )
 
 type ContextKey string
@@ -26,7 +27,16 @@ func AuthMiddleware(h http.Handler) http.Handler {
 			w.Write([]byte("Authorization format must be <Bearer 123>"))
 			return
 		}
-
+		claims, err := parseJWT(strings.Split(authHeader, "Bearer ")[1])
+		if err != nil {
+			w.Write([]byte(err.Error()))
+			return
+		}
+		expiration := int64(claims[ExpirationKey].(float64))
+		if expiration < time.Now().Unix() {
+			w.Write([]byte("Token has expired"))
+			return
+		}
 		ctx := context.WithValue(r.Context(), authKey, authHeader)
 		h.ServeHTTP(w, r.WithContext(ctx))
 	})
