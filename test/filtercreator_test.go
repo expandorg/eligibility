@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	m "github.com/gemsorg/eligibility/pkg/mock"
 	"github.com/gemsorg/eligibility/pkg/server"
 	"github.com/stretchr/testify/assert"
 )
@@ -49,8 +51,11 @@ func TestFiltersCreator(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-
+			os.Setenv("JWT_SECRET", m.JWT_SECRET)
 			r, err := http.NewRequest("POST", "/filters", bytes.NewBuffer(tt.params))
+			token, _ := m.GenerateJWT(1)
+			// fmt.Println("JWT", token)
+			r.Header.Add("Authorization", "Bearer "+token)
 			if err != nil {
 				t.Fatal(err)
 			}

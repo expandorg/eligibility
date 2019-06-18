@@ -12,6 +12,7 @@ import (
 func TestFiltersFetcher(t *testing.T) {
 	_, dbx, _ := Setup()
 	r, err := http.NewRequest("GET", "/filters", nil)
+	r.Header.Add("Authorization", bearer)
 	if err != nil {
 		t.Fatal(err)
 	}
