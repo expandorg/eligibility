@@ -23,4 +23,4 @@ COPY --from=build-stage  /go/src/github.com/gemsorg/eligibility/bin/eligibility 
 
 EXPOSE 3000
 
-ENTRYPOINT ./eligibility
+CMD ["./eligibility"]
