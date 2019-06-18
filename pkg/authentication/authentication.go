@@ -24,7 +24,12 @@ type AuthData struct {
 }
 
 func ParseAuthData(ctx context.Context) (AuthData, error) {
-	tokenString, _ := extractAuthorizationHeaderFromContext(ctx)
+	tokenString, err := extractAuthorizationHeaderFromContext(ctx)
+
+	if err != nil {
+		return AuthData{}, err
+	}
+
 	claims, err := parseJWT(tokenString)
 
 	if err != nil {

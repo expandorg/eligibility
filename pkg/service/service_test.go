@@ -4,6 +4,9 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/gemsorg/eligibility/pkg/authentication"
+
+	"github.com/gemsorg/eligibility/pkg/authorization"
 	"github.com/gemsorg/eligibility/pkg/datastore"
 	"github.com/gemsorg/eligibility/pkg/filter"
 	"github.com/gemsorg/eligibility/pkg/mock"
@@ -12,6 +15,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
+	authorizer := authorization.NewAuthorizer()
 	ds := &datastore.EligibilityStore{}
 	type args struct {
 		s *datastore.EligibilityStore
@@ -24,12 +28,12 @@ func TestNew(t *testing.T) {
 		{
 			"it creates a new service",
 			args{s: ds},
-			&service{ds},
+			&service{ds, authorizer},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := New(tt.args.s)
+			got := New(tt.args.s, authorizer)
 			assert.Equal(t, got, tt.want, tt.name)
 		})
 	}
@@ -157,22 +161,19 @@ func Test_service_GetWorkerProfile(t *testing.T) {
 		{
 			"it returns the worker's profile",
 			fields{ds},
-			args{"1"},
+			args{"8"},
 			mock.FakeProfile,
-			false,
-		},
-		{
-			"it returns an empty profile if worker_id not found",
-			fields{ds},
-			args{"nonExistantID"},
-			mock.EmptyProfile,
 			false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			authData := authentication.AuthData{1591960106, "http://localhost:3000", 8}
+			authorizer := authorization.NewAuthorizer()
+			authorizer.SetAuthData(authData)
 			s := &service{
-				store: tt.fields.store,
+				store:      tt.fields.store,
+				authorizor: authorizer,
 			}
 			got, err := s.GetWorkerProfile(tt.args.workerID)
 			if (err != nil) != tt.wantErr {

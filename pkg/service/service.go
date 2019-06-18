@@ -46,6 +46,7 @@ func (s *service) CreateFilter(f filter.Filter) (filter.Filter, error) {
 
 func (s *service) GetWorkerProfile(workerID string) (workerprofile.Profile, error) {
 	authUserID, _ := strconv.ParseUint(workerID, 10, 64)
+
 	_, err := s.authorizor.CanAccessWorkerProfile(authUserID)
 	if err != nil {
 		return workerprofile.Profile{}, err
@@ -65,11 +66,7 @@ func (s *service) SetAuthData(data authentication.AuthData) {
 	s.authorizor.SetAuthData(data)
 }
 
-// GetWorkerProfile(workerID int)
-// CreateWorkerProfile(workerID int, profile []Profile)
-// GetJobFilters(jobID int)
 // GetJobWhiteList(jobID int)
-// CreateJobFilters(jobID int, filters []Filter, profile Profile)
 // GetEligibleWorkerCount(filters []Filter)
 // GetEligibleJobsForWorker(workerID int)
 // IsWorkerEligibleForJob(workerID int, jobID int)

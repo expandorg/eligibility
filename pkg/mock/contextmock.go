@@ -29,17 +29,17 @@ func (ctx MockContext) Err() error {
 func (ctx MockContext) Value(key interface{}) interface{} {
 	switch fmt.Sprintf("%v", key) {
 	case "auth":
-		j, _ := GenerateJWT()
+		j, _ := GenerateJWT(1)
 		return "Bearer " + j
 	}
 	return nil
 }
 
-func GenerateJWT() (string, error) {
+func GenerateJWT(userID int) (string, error) {
 	c := jwt.MapClaims{
 		"exp": time.Now().Add(8760 * time.Hour).Unix(),
 		"iss": "http://localhost:3000",
-		"uid": 1,
+		"uid": userID,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, c)
 	return token.SignedString([]byte(JWT_SECRET))
