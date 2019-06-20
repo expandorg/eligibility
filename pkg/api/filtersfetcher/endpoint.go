@@ -3,6 +3,7 @@ package filtersfetcher
 import (
 	"context"
 
+	"github.com/gemsorg/eligibility/pkg/apierror"
 	service "github.com/gemsorg/eligibility/pkg/service"
 
 	"github.com/go-kit/kit/endpoint"
@@ -10,8 +11,16 @@ import (
 
 func makeFiltersFetcherEndpoint(svc service.EligibilityService) endpoint.Endpoint {
 	return func(_ context.Context, request interface{}) (interface{}, error) {
-		filters, _ := svc.GetFilters()
+		filters, err := svc.GetFilters()
+		if err != nil {
+			return nil, errorResponse(err)
+		}
+
 		grouped := filters.GroupByType()
 		return grouped, nil
 	}
+}
+
+func errorResponse(err error) *apierror.APIError {
+	return apierror.New(500, err.Error(), err)
 }

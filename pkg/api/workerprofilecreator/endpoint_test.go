@@ -5,6 +5,13 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/gemsorg/eligibility/pkg/filter"
+	"github.com/gemsorg/eligibility/pkg/mock"
+	service "github.com/gemsorg/eligibility/pkg/service"
+	"github.com/gemsorg/eligibility/pkg/workerprofile"
+	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/gemsorg/eligibility/pkg/apierror"
 )
 
@@ -33,4 +40,41 @@ func Test_errorResponse(t *testing.T) {
 			}
 		})
 	}
+}
+
+func Test_makeCreateWorkerProfileEndpoint(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	s := service.NewMockEligibilityService(ctrl)
+	cxt := mock.MockContext{}
+	newProfile := workerprofile.NewProfile{}
+	// No error
+	attr := filter.Filters{filter.Filter{1, "Gender", "male"}}
+	profile := workerprofile.Profile{
+		ID:         58,
+		WorkerID:   8,
+		Birthdate:  "1982-08-05T00:00:00Z",
+		City:       "Lake Verlashire",
+		Locality:   "District of Columbia",
+		Country:    "Netherlands",
+		State:      "partial",
+		Attributes: attr.GroupByType(),
+	}
+	s.EXPECT().
+		CreateWorkerProfile(newProfile).
+		Return(profile, nil).
+		Times(1)
+
+	resp, _ := makeCreateWorkerProfileEndpoint(s)(cxt, newProfile)
+	assert.Equal(t, profile, resp)
+
+	// Error
+	err := errors.New("error creating profile")
+	s.EXPECT().
+		CreateWorkerProfile(newProfile).
+		Return(workerprofile.Profile{}, err).
+		Times(1)
+	resp, e := makeCreateWorkerProfileEndpoint(s)(cxt, newProfile)
+	assert.Equal(t, nil, resp)
+	assert.Equal(t, errorResponse(err), e)
 }
