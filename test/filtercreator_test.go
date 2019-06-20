@@ -4,20 +4,18 @@ import (
 	"bytes"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 
-	"github.com/DATA-DOG/go-sqlmock"
-	m "github.com/gemsorg/eligibility/pkg/mock"
+	"github.com/gemsorg/eligibility/pkg/filter"
 	"github.com/gemsorg/eligibility/pkg/server"
+	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestFiltersCreator(t *testing.T) {
-	db, dbx, mock := Setup()
+	db, dbx, _, s := Setup(t)
 	defer db.Close()
-	mock.ExpectExec("INSERT INTO filters").WithArgs("foo", "bar").
-		WillReturnResult(sqlmock.NewResult(0, 0))
+	f := filter.Filter{1, "Gender", "male"}
 	tests := []struct {
 		name   string
 		params []byte
@@ -51,22 +49,24 @@ func TestFiltersCreator(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			os.Setenv("JWT_SECRET", m.JWT_SECRET)
+			s.EXPECT().
+				CreateFilter(gomock.Any()).
+				Return(f, nil).
+				Times(1)
+
+			s.EXPECT().
+				SetAuthData(gomock.Any()).
+				AnyTimes()
 			r, err := http.NewRequest("POST", "/filters", bytes.NewBuffer(tt.params))
-			token, _ := m.GenerateJWT(1)
-			// fmt.Println("JWT", token)
-			r.Header.Add("Authorization", "Bearer "+token)
 			if err != nil {
 				t.Fatal(err)
 			}
-
+			r.Header.Add("Authorization", bearer)
 			w := httptest.NewRecorder()
-			s := server.New(dbx)
-			s.ServeHTTP(w, r)
+			svr := server.New(dbx, s)
+			svr.ServeHTTP(w, r)
 
 			resp := w.Result()
-			// bodyBytes, _ := ioutil.ReadAll(resp.Body)
-			// bodyString := string(bodyBytes)
 			assert.Equal(t, tt.want, resp.StatusCode)
 		})
 	}

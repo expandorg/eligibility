@@ -6,6 +6,11 @@ import (
 	"testing"
 
 	"github.com/gemsorg/eligibility/pkg/apierror"
+	"github.com/gemsorg/eligibility/pkg/filter"
+	"github.com/gemsorg/eligibility/pkg/mock"
+	service "github.com/gemsorg/eligibility/pkg/service"
+	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_errorResponse(t *testing.T) {
@@ -33,4 +38,31 @@ func Test_errorResponse(t *testing.T) {
 			}
 		})
 	}
+}
+
+func Test_makeCreateFilterEndpoint(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	s := service.NewMockEligibilityService(ctrl)
+	cxt := mock.MockContext{}
+
+	// No error
+	f := filter.Filter{1, "Gender", "male"}
+	s.EXPECT().
+		CreateFilter(f).
+		Return(f, nil).
+		Times(1)
+
+	resp, _ := makeCreateFilterEndpoint(s)(cxt, f)
+	assert.Equal(t, f, resp)
+
+	// Error
+	err := errors.New("error creating filter")
+	s.EXPECT().
+		CreateFilter(f).
+		Return(filter.Filter{}, err).
+		Times(1)
+	resp, e := makeCreateFilterEndpoint(s)(cxt, f)
+	assert.Equal(t, nil, resp)
+	assert.Equal(t, errorResponse(err), e)
 }

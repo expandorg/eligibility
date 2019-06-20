@@ -3,8 +3,6 @@ package server
 import (
 	"net/http"
 
-	"github.com/gemsorg/eligibility/pkg/authorization"
-
 	"github.com/gemsorg/eligibility/pkg/api/workerprofilecreator"
 	"github.com/gemsorg/eligibility/pkg/authentication"
 
@@ -14,8 +12,6 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
-	"github.com/gemsorg/eligibility/pkg/datastore"
-
 	"github.com/gemsorg/eligibility/pkg/api/filtersfetcher"
 
 	"github.com/gemsorg/eligibility/pkg/api/healthchecker"
@@ -23,11 +19,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func New(db *sqlx.DB) http.Handler {
+func New(
+	db *sqlx.DB,
+	s service.EligibilityService,
+) http.Handler {
 	r := mux.NewRouter()
-	ds := datastore.NewEligibilityStore(db)
-	authorizer := authorization.NewAuthorizer()
-	s := service.New(ds, authorizer)
+
 	r.Handle("/_health", healthchecker.MakeHandler(s)).Methods("GET")
 	r.Handle("/filters", filtersfetcher.MakeHandler(s)).Methods("GET")
 	r.Handle("/filters", filtercreator.MakeHandler(s)).Methods("POST")
