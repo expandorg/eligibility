@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestFilters_GroupByType(t *testing.T) {
+func TestFiltersGroupByType(t *testing.T) {
 	tests := []struct {
 		name string
 		fs   *Filters

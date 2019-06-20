@@ -39,7 +39,7 @@ func TestNew(t *testing.T) {
 	}
 }
 
-func Test_service_Healthy(t *testing.T) {
+func TestHealthy(t *testing.T) {
 	ds := &datastore.EligibilityStore{}
 	type fields struct {
 		store *datastore.EligibilityStore
@@ -66,7 +66,7 @@ func Test_service_Healthy(t *testing.T) {
 	}
 }
 
-func Test_service_GetFilters(t *testing.T) {
+func TestGetFilters(t *testing.T) {
 	ds := &mock.FakeStore{}
 	type fields struct {
 		store datastore.Storage
@@ -101,7 +101,7 @@ func Test_service_GetFilters(t *testing.T) {
 	}
 }
 
-func Test_service_CreateFilter(t *testing.T) {
+func TestCreateFilter(t *testing.T) {
 	ds := &mock.FakeStore{}
 	requestFilter := mock.FakeFilter
 	requestFilter.ID = 0
@@ -143,7 +143,7 @@ func Test_service_CreateFilter(t *testing.T) {
 	}
 }
 
-func Test_service_GetWorkerProfile(t *testing.T) {
+func TestGetWorkerProfile(t *testing.T) {
 	ds := &mock.FakeStore{}
 	type fields struct {
 		store datastore.Storage
