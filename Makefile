@@ -1,4 +1,4 @@
-include .env
+-include .env
 LAST_MIGRATION = $(shell ls -tr migrations/sql/ | tail -n 1 | cut -d'_' -f1)
 
 ifeq ($(LAST_MIGRATION),)
