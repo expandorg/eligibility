@@ -40,7 +40,7 @@ help:
 build: build-service
 
 run: build 
-	bin/eligibility
+	bin/eligibility --env=local
 
 build-service:
 	@echo "Building service"

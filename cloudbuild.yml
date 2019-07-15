@@ -1,9 +1,0 @@
-steps:
-  - id: testing
-    name: "gcr.io/cloud-builders/go"
-    args: ["test","./..."]
-    env: ["PROJECT_ROOT=github.com/gemsorg/eligibility"]
-  - id: building
-    name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--tag=gcr.io/$PROJECT_ID/eligibility', '.']
-images: ['gcr.io/$PROJECT_ID/eligibility']
