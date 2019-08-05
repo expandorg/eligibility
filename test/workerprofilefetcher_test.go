@@ -21,6 +21,7 @@ func TestWorkerProfileFetcher(t *testing.T) {
 	profile := workerprofile.Profile{
 		ID:         58,
 		WorkerID:   8,
+		Name:       "Test User",
 		Birthdate:  "1982-08-05T00:00:00Z",
 		City:       "Lake Verlashire",
 		Locality:   "District of Columbia",
