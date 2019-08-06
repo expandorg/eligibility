@@ -14,8 +14,8 @@ import (
 func TestEligibilityStore_CreateWorkerProfile(t *testing.T) {
 	_, dbx, mock := mock.Mysql()
 	defer dbx.Close()
-	wp := workerprofile.NewProfile{8, "1980-08-05", "Lake", "District", "Netherlands", "partial", []int{1}}
-	fakeProfile := workerprofile.Profile{1, 8, "1980-08-05", "Lake", "District", "Netherlands", "partial", filter.GroupedFilters{}}
+	wp := workerprofile.NewProfile{8, "Test User", "1980-08-05", "Lake", "District", "Netherlands", "partial", []int{1}}
+	fakeProfile := workerprofile.Profile{1, 8, "Test User", "1980-08-05", "Lake", "District", "Netherlands", "partial", filter.GroupedFilters{}}
 	type fields struct {
 		DB *sqlx.DB
 	}
@@ -42,7 +42,7 @@ func TestEligibilityStore_CreateWorkerProfile(t *testing.T) {
 			}
 			mock.ExpectBegin()
 			mock.ExpectExec("REPLACE INTO worker_profiles").
-				WithArgs(wp.WorkerID, wp.Birthdate, wp.City, wp.Locality, wp.Country, wp.State).
+				WithArgs(wp.WorkerID, wp.Name, wp.Birthdate, wp.City, wp.Locality, wp.Country, wp.State).
 				WillReturnResult(sqlmock.NewResult(1, 1))
 			mock.ExpectExec("Delete FROM filters_workers").WithArgs(wp.WorkerID).WillReturnResult(sqlmock.NewResult(1, 1))
 			mock.ExpectExec("INSERT INTO filters_workers").WillReturnResult(sqlmock.NewResult(1, 1))

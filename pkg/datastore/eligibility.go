@@ -1,6 +1,7 @@
 package datastore
 
 import (
+	"database/sql"
 	"fmt"
 	"strconv"
 	"strings"
@@ -56,8 +57,10 @@ func (s *EligibilityStore) GetWorkerProfile(workerID string) (workerprofile.Prof
 	p := workerprofile.Profile{State: workerprofile.NOTFILLED, Attributes: attr}
 
 	err := s.DB.Get(&p, "SELECT * FROM worker_profiles WHERE worker_id=? LIMIT 1", workerID)
-
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return p, nil
+		}
 		return p, err
 	}
 
@@ -73,8 +76,8 @@ func (s *EligibilityStore) GetWorkerProfile(workerID string) (workerprofile.Prof
 func (s *EligibilityStore) CreateWorkerProfile(wp workerprofile.NewProfile) (workerprofile.Profile, error) {
 	tx, err := s.DB.Begin()
 	_, err = tx.Exec(
-		"REPLACE INTO worker_profiles (worker_id, birthdate, city, locality, country, state) VALUES (?, ?, ?, ?, ?, ?)",
-		wp.WorkerID, wp.Birthdate, wp.City, wp.Locality, wp.Country, wp.State)
+		"REPLACE INTO worker_profiles (worker_id, name, birthdate, city, locality, country, state) VALUES (?, ?, ?, ?, ?, ?, ?)",
+		wp.WorkerID, wp.Name, wp.Birthdate, wp.City, wp.Locality, wp.Country, wp.State)
 
 	if err != nil {
 		tx.Rollback()

@@ -18,11 +18,12 @@ import (
 )
 
 func TestWorkerProfileResponse(t *testing.T) {
-	want := `{"id":58,"worker_id":8,"birthdate":"1982-08-05T00:00:00Z","city":"Lake Verlashire","locality":"District of Columbia","country":"Netherlands","state":"partial","attributes":{"Gender":[{"id":1,"type":"Gender","value":"male"}]}}`
+	want := `{"id":58,"worker_id":8,"name":"Test User","birthdate":"1982-08-05T00:00:00Z","city":"Lake Verlashire","locality":"District of Columbia","country":"Netherlands","state":"partial","attributes":{"Gender":[{"id":1,"type":"Gender","value":"male"}]}}`
 	attr := filter.Filters{filter.Filter{1, "Gender", "male"}}
 	profile := workerprofile.Profile{
 		ID:         58,
 		WorkerID:   8,
+		Name:       "Test User",
 		Birthdate:  "1982-08-05T00:00:00Z",
 		City:       "Lake Verlashire",
 		Locality:   "District of Columbia",
@@ -47,6 +48,7 @@ func Test_makeCreateWorkerProfileEndpoint(t *testing.T) {
 	profile := workerprofile.Profile{
 		ID:         58,
 		WorkerID:   8,
+		Name:       "Test User",
 		Birthdate:  "1982-08-05T00:00:00Z",
 		City:       "Lake Verlashire",
 		Locality:   "District of Columbia",
