@@ -10,19 +10,19 @@ steps:
   # # This step builds the container image
   - id: Build
     name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--tag=gcr.io/$PROJECT_ID/eligibility:$SHORT_SHA', '.']
+    args: ['build', '--tag=gcr.io/$PROJECT_ID/eligibility-dev:$SHORT_SHA', '.']
   - id: BuildMigration
     name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--tag=gcr.io/$PROJECT_ID/eligibility-migration:$SHORT_SHA', 'migrations']
+    args: ['build', '--tag=gcr.io/$PROJECT_ID/eligibility-dev-migration:$SHORT_SHA', 'migrations']
   # # This step pushes the image to Container Registry
   # # The PROJECT_ID and SHORT_SHA variables are automatically
   # # replaced by Cloud Build.
-  - id: Push To Registry
+  - id: Push To Registry 
     name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/eligibility:$SHORT_SHA']
+    args: ['push', 'gcr.io/$PROJECT_ID/eligibility-dev:$SHORT_SHA']
   - id: PushMigration 
     name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/eligibility-migration:$SHORT_SHA']
+    args: ['push', 'gcr.io/$PROJECT_ID/eligibility-dev-migration:$SHORT_SHA']
     
   # This step deploys the new version of our container image
   # in the Kubernetes Engine cluster.
@@ -32,14 +32,14 @@ steps:
     args:
     - '-c'
     - |
-      sed "s/VERSION/${SHORT_SHA}/g" k8s.yaml > kubernetes.yaml
-  
+      sed "s/VERSION/${SHORT_SHA}/g" k8s.staging.yaml > kubernetes.staging.yaml
+
   - id: Deploy
     name: 'gcr.io/cloud-builders/kubectl'
     args:
     - 'apply'
     - '-f'
-    - 'kubernetes.yaml'
+    - 'kubernetes.staging.yaml'
     env:
     - CLOUDSDK_COMPUTE_ZONE=us-central1-a
-    - CLOUDSDK_CONTAINER_CLUSTER=api
+    - CLOUDSDK_CONTAINER_CLUSTER=dev
