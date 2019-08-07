@@ -95,3 +95,6 @@ db-seed:
 	mkdir -p ./bin
 	go build -o ./bin/dbseed ./pkg/database/dbseed
 	./bin/dbseed
+
+tag-staging:
+	git tag -a staging-${SHORT_COMMIT} -m"staging release version ${SHORT_COMMIT}"

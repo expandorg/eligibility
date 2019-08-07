@@ -14,16 +14,16 @@ spec:
     spec:
       containers:
       - name: eligibility
-        image: gcr.io/gems-org/eligibility:VERSION
+        image: gcr.io/gems-org/eligibility-dev:VERSION
         command: ["./eligibility"]
-        args: ["--env=production"]
+        args: ["--env=staging"]
         env:
         - name: ELIG_DB_HOST
           value: "cloudsql-proxy"
         - name: ELIG_DB_PORT
           value: "3306"
         - name: ELIG_DB_NAME
-          value: "eligibility"
+          value: "eligibility_staging"
         - name: ELIG_DB_USER
           valueFrom:
             configMapKeyRef:
@@ -39,10 +39,7 @@ spec:
             configMapKeyRef:
               name: eligibility-data
               key: JWT_SECRET
-        # resources:
-        #   limits:
-        #     memory: "128Mi"
-        #     cpu: "500m"
+        resources: {}
       
 ---
 apiVersion: batch/v1
@@ -58,7 +55,7 @@ spec:
     spec:
       containers:
       - name: eligibility-migration
-        image: gcr.io/gems-org/eligibility-migration:VERSION
+        image: gcr.io/gems-org/eligibility-dev-migration:VERSION
         args: ["composeup"]
         env:
         - name: ELIG_DB_HOST
@@ -66,7 +63,7 @@ spec:
         - name: ELIG_DB_PORT
           value: "3306"
         - name: ELIG_DB_NAME
-          value: "eligibility"
+          value: "eligibility_staging"
         - name: ELIG_DB_USER
           valueFrom:
             configMapKeyRef:
