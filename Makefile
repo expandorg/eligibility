@@ -11,6 +11,7 @@ endif
 BIN_NAME=eligibility
 VERSION ?= dev
 GIT_COMMIT ?=$(shell git rev-parse HEAD)
+SHORT_COMMIT ?=$(shell git rev-parse --short HEAD)
 BUILD_DATE ?= $(shell date +%FT%T%z)
 TIMESTAMP ?= $(shell date +%Y%m%d%H%M)
 

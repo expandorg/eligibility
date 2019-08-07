@@ -7,6 +7,7 @@ spec:
   selector:
     matchLabels:
       app: eligibility
+  replicas: 3
   template:
     metadata:
       labels:
@@ -39,10 +40,7 @@ spec:
             configMapKeyRef:
               name: eligibility-data
               key: JWT_SECRET
-        # resources:
-        #   limits:
-        #     memory: "128Mi"
-        #     cpu: "500m"
+        resources: {}
       
 ---
 apiVersion: batch/v1
