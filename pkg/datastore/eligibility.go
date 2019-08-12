@@ -59,6 +59,8 @@ func (s *EligibilityStore) GetWorkerProfile(workerID string) (workerprofile.Prof
 	err := s.DB.Get(&p, "SELECT * FROM worker_profiles WHERE worker_id=? LIMIT 1", workerID)
 	if err != nil {
 		if err == sql.ErrNoRows {
+			authUserID, _ := strconv.ParseUint(workerID, 10, 64)
+			p.ID = authUserID
 			return p, nil
 		}
 		return p, err
