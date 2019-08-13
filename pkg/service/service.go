@@ -1,6 +1,8 @@
 package service
 
 import (
+	"strconv"
+
 	"github.com/gemsorg/eligibility/pkg/authentication"
 	"github.com/gemsorg/eligibility/pkg/authorization"
 	"github.com/gemsorg/eligibility/pkg/datastore"
@@ -43,20 +45,20 @@ func (s *service) CreateFilter(f filter.Filter) (filter.Filter, error) {
 }
 
 func (s *service) GetWorkerProfile(workerID string) (workerprofile.Profile, error) {
-	// authUserID, _ := strconv.ParseUint(workerID, 10, 64)
+	authUserID, _ := strconv.ParseUint(workerID, 10, 64)
 
-	// _, err := s.authorizor.CanAccessWorkerProfile(authUserID)
-	// if err != nil {
-	// 	return workerprofile.Profile{}, err
-	// }
+	_, err := s.authorizor.CanAccessWorkerProfile(authUserID)
+	if err != nil {
+		return workerprofile.Profile{}, err
+	}
 	return s.store.GetWorkerProfile(workerID)
 }
 
 func (s *service) CreateWorkerProfile(wp workerprofile.NewProfile) (workerprofile.Profile, error) {
-	// _, err := s.authorizor.CanAccessWorkerProfile(wp.WorkerID)
-	// if err != nil {
-	// 	return workerprofile.Profile{}, err
-	// }
+	_, err := s.authorizor.CanAccessWorkerProfile(wp.WorkerID)
+	if err != nil {
+		return workerprofile.Profile{}, err
+	}
 	return s.store.CreateWorkerProfile(wp)
 }
 
