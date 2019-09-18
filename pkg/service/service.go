@@ -3,6 +3,8 @@ package service
 import (
 	"strconv"
 
+	"github.com/gemsorg/eligibility/pkg/eligibility"
+
 	"github.com/gemsorg/eligibility/pkg/authentication"
 	"github.com/gemsorg/eligibility/pkg/authorization"
 	"github.com/gemsorg/eligibility/pkg/datastore"
@@ -18,6 +20,7 @@ type EligibilityService interface {
 	GetWorkerProfile(workerID string) (workerprofile.Profile, error)
 	CreateWorkerProfile(workerprofile.NewProfile) (workerprofile.Profile, error)
 	SetAuthData(data authentication.AuthData)
+	GetWorkerEligibility(workerID string) (eligibility.WorkerEligibility, error)
 }
 
 type service struct {
@@ -66,7 +69,10 @@ func (s *service) SetAuthData(data authentication.AuthData) {
 	s.authorizor.SetAuthData(data)
 }
 
-// GetJobWhiteList(jobID int)
-// GetEligibleWorkerCount(filters []Filter)
-// GetEligibleJobsForWorker(workerID int)
-// IsWorkerEligibleForJob(workerID int, jobID int)
+func (s *service) GetWorkerEligibility(workerID string) (eligibility.WorkerEligibility, error) {
+	return eligibility.WorkerEligibility{
+		Complete:    false,
+		Eligibile:   []uint64{},
+		InEligibile: []uint64{1},
+	}, nil
+}
