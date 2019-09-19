@@ -77,6 +77,17 @@ func (s *EligibilityStore) GetWorkerProfile(workerID string) (workerprofile.Prof
 
 func (s *EligibilityStore) CreateWorkerProfile(wp workerprofile.NewProfile) (workerprofile.Profile, error) {
 	tx, err := s.DB.Begin()
+
+	// Create new location filters if they don't exist
+	locIDS, err := s.locationToFilters(tx, wp)
+
+	if err != nil {
+		tx.Rollback()
+		return workerprofile.Profile{}, err
+	}
+
+	wp.Attributes = append(wp.Attributes, locIDS...)
+
 	_, err = tx.Exec(
 		"REPLACE INTO worker_profiles (worker_id, name, birthdate, city, locality, country, state) VALUES (?, ?, ?, ?, ?, ?, ?)",
 		wp.WorkerID, wp.Name, wp.Birthdate, wp.City, wp.Locality, wp.Country, wp.State)
@@ -122,11 +133,75 @@ func (s *EligibilityStore) CreateWorkerProfile(wp workerprofile.NewProfile) (wor
 	return p, nil
 }
 
-// func (s *EligibilityStore) GetJobFilters(jobID int)                                       {}
-// func (s *EligibilityStore) GetJobWhiteList(jobID int)                                     {}
-// func (s *EligibilityStore) CreateJobFilters(jobID int, filters []Filter, profile Profile) {}
-// func (s *EligibilityStore) GetEligibleWorkerCount(filters []Filter)                       {}
-// func (s *EligibilityStore) GetWorkerProfile(workerID int)                                 {}
-// func (s *EligibilityStore) CreateWorkerProfile(workerID int, profile []Profile)           {}
-// func (s *EligibilityStore) GetEligibleJobsForWorker(workerID int)                         {}
-// func (s *EligibilityStore) IsWorkerEligibleForJob(workerID int, jobID int)                {}
+// We convert (find or create) location profile data (city, locality, country) to filters
+func (s *EligibilityStore) locationToFilters(tx *sql.Tx, wp workerprofile.NewProfile) ([]int, error) {
+	locIDS := []int{}
+	a := map[string]string{
+		"Country":  wp.Country,
+		"City":     wp.City,
+		"Locality": wp.Locality,
+	}
+
+	type filterResponse struct {
+		ID  int64
+		Err error
+	}
+	ch := make(chan filterResponse)
+
+	for t, v := range a {
+		if v == "" {
+			delete(a, t)
+			continue
+		}
+		go func(tp string, value string) {
+			id, err := s.findOrCreateFilter(tx, tp, value)
+			if err != nil {
+				tx.Rollback()
+				ch <- filterResponse{Err: err}
+			}
+			ch <- filterResponse{ID: id}
+		}(t, v)
+	}
+
+	working := true
+	for len(a) > 0 && working {
+		select {
+		case r := <-ch:
+			if r.Err != nil {
+				tx.Rollback()
+				return []int{}, r.Err
+			}
+			locIDS = append(locIDS, int(r.ID))
+			// keep listening/waiting until we're done with all filters
+			if len(locIDS) == len(a) {
+				close(ch)
+				working = false
+			}
+		}
+	}
+	return locIDS, nil
+}
+
+func (s *EligibilityStore) findOrCreateFilter(tx *sql.Tx, tp string, value string) (int64, error) {
+	res, err := tx.Exec(
+		"INSERT INTO filters (type, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value=?",
+		tp, value, value,
+	)
+	if err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+	var id int64
+	rows, _ := res.RowsAffected()
+	// If a filter already existed, it won't be returned from the above query, so we select it
+	if rows == 0 {
+		err = s.DB.Get(&id, "SELECT id FROM filters WHERE type=? AND value=?", tp, value)
+		if err != nil {
+			return 0, err
+		}
+	} else {
+		// we created a new filter, get the inserted id
+		id, _ = res.LastInsertId()
+	}
+	return id, nil
+}
