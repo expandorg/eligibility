@@ -70,9 +70,15 @@ func (s *service) SetAuthData(data authentication.AuthData) {
 }
 
 func (s *service) GetWorkerEligibility(workerID string) (eligibility.WorkerEligibility, error) {
-	return eligibility.WorkerEligibility{
-		Complete:    false,
-		Eligibile:   []uint64{},
-		InEligibile: []uint64{1},
-	}, nil
+	var profileComplete bool
+	w, j, err := s.store.GetWorkerEligibility(workerID)
+	if err != nil {
+		return eligibility.WorkerEligibility{}, err
+	}
+
+	// Worker doesn't have country set in their profile
+	if w.FilterID != 0 {
+		profileComplete = true
+	}
+	return eligibility.GetWorkerEligibility(w, j, profileComplete), nil
 }

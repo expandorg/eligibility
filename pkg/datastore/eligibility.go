@@ -16,6 +16,7 @@ type Storage interface {
 	CreateFilter(filter.Filter) (filter.Filter, error)
 	GetWorkerProfile(workerID string) (workerprofile.Profile, error)
 	CreateWorkerProfile(wp workerprofile.NewProfile) (workerprofile.Profile, error)
+	GetWorkerEligibility(workerID string) (filter.FilterWorker, []filter.FilterJob, error)
 }
 
 type EligibilityStore struct {
@@ -204,4 +205,24 @@ func (s *EligibilityStore) findOrCreateFilter(tx *sql.Tx, tp string, value strin
 		id, _ = res.LastInsertId()
 	}
 	return id, nil
+}
+
+func (s *EligibilityStore) GetWorkerEligibility(workerID string) (filter.FilterWorker, []filter.FilterJob, error) {
+	fw := filter.FilterWorker{}
+	fj := []filter.FilterJob{}
+
+	err := s.DB.Get(&fw, "SELECT fj.`worker_id`, fj.`filter_id` from filters AS f inner join filters_workers AS fj on f.`id` = fj.`filter_id` where fj.`worker_id` = ? AND f.type =?", workerID, "Country")
+	if err != nil && err != sql.ErrNoRows {
+		return fw, fj, err
+	}
+
+	err = s.DB.Select(&fj, "SELECT fj.`job_id`, fj.`filter_id` from filters AS f inner join filters_jobs AS fj on f.`id` = fj.`filter_id` where f.`type`=?", "Country")
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return fw, fj, nil
+		}
+		return fw, fj, err
+	}
+
+	return fw, fj, nil
 }
