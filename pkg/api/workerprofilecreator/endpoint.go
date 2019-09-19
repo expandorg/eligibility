@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/gemsorg/eligibility/pkg/apierror"
+	"github.com/gemsorg/eligibility/pkg/authentication"
 	"github.com/gemsorg/eligibility/pkg/workerprofile"
 
 	service "github.com/gemsorg/eligibility/pkg/service"
@@ -13,6 +14,8 @@ import (
 
 func makeCreateWorkerProfileEndpoint(svc service.EligibilityService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		data, _ := authentication.ParseAuthData(ctx)
+		svc.SetAuthData(data)
 		req := request.(workerprofile.NewProfile)
 		saved, err := svc.CreateWorkerProfile(req)
 		if err != nil {
