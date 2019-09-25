@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/gemsorg/eligibility/pkg/authentication"
 	"github.com/gemsorg/eligibility/pkg/filter"
 	"github.com/gemsorg/eligibility/pkg/mock"
 	service "github.com/gemsorg/eligibility/pkg/service"
@@ -61,6 +62,10 @@ func Test_makeCreateWorkerProfileEndpoint(t *testing.T) {
 		State:      "partial",
 		Attributes: attr.GroupByType(),
 	}
+	s.EXPECT().
+		SetAuthData(authentication.AuthData{}).
+		AnyTimes()
+
 	s.EXPECT().
 		CreateWorkerProfile(newProfile).
 		Return(profile, nil).

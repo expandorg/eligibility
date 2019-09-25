@@ -44,3 +44,7 @@ func (s *FakeStore) CreateWorkerProfile(wp workerprofile.NewProfile) (workerprof
 func (db *FakeDB) Select(dest interface{}, query string, args ...interface{}) error {
 	return nil
 }
+
+func (s *FakeStore) GetWorkerEligibility(workerID string) (filter.FilterWorker, []filter.FilterJob, error) {
+	return filter.FilterWorker{}, []filter.FilterJob{}, nil
+}

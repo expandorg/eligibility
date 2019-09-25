@@ -6,6 +6,16 @@ type Filter struct {
 	Value string `json:"value"`
 }
 
+type FilterJob struct {
+	JobID    uint64 `db:"job_id"`
+	FilterID uint64 `db:"filter_id"`
+}
+
+type FilterWorker struct {
+	WorkerID uint64 `db:"worker_id"`
+	FilterID uint64 `db:"filter_id"`
+}
+
 type Filters []Filter
 
 type GroupedFilters map[string]Filters

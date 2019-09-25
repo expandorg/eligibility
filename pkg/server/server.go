@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 
+	"github.com/gemsorg/eligibility/pkg/api/eligibilityfetcher"
 	"github.com/gemsorg/eligibility/pkg/api/workerprofilecreator"
 	"github.com/gemsorg/eligibility/pkg/authentication"
 
@@ -29,6 +30,7 @@ func New(
 	r.Handle("/filters", filtersfetcher.MakeHandler(s)).Methods("GET")
 	r.Handle("/filters", filtercreator.MakeHandler(s)).Methods("POST")
 	r.Handle("/workers/{worker_id}/profiles", workerprofilefetcher.MakeHandler(s)).Methods("GET")
+	r.Handle("/workers/{worker_id}/eligibility", eligibilityfetcher.MakeHandler(s)).Methods("GET")
 	r.Handle("/workers/{worker_id}/profiles", workerprofilecreator.MakeHandler(s)).Methods("POST")
 	r.Use(authentication.AuthMiddleware)
 	return withHandlers(r)

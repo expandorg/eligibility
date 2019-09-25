@@ -5,11 +5,13 @@
 package service
 
 import (
+	reflect "reflect"
+
 	authentication "github.com/gemsorg/eligibility/pkg/authentication"
+	eligibility "github.com/gemsorg/eligibility/pkg/eligibility"
 	filter "github.com/gemsorg/eligibility/pkg/filter"
 	workerprofile "github.com/gemsorg/eligibility/pkg/workerprofile"
 	gomock "github.com/golang/mock/gomock"
-	reflect "reflect"
 )
 
 // MockEligibilityService is a mock of EligibilityService interface
@@ -119,4 +121,19 @@ func (m *MockEligibilityService) SetAuthData(data authentication.AuthData) {
 func (mr *MockEligibilityServiceMockRecorder) SetAuthData(data interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetAuthData", reflect.TypeOf((*MockEligibilityService)(nil).SetAuthData), data)
+}
+
+// GetWorkerEligibility mocks base method
+func (m *MockEligibilityService) GetWorkerEligibility(workerID string) (eligibility.WorkerEligibility, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetWorkerEligibility", workerID)
+	ret0, _ := ret[0].(eligibility.WorkerEligibility)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetWorkerEligibility indicates an expected call of GetWorkerEligibility
+func (mr *MockEligibilityServiceMockRecorder) GetWorkerEligibility(workerID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetWorkerEligibility", reflect.TypeOf((*MockEligibilityService)(nil).GetWorkerEligibility), workerID)
 }
