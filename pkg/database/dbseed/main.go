@@ -54,7 +54,12 @@ func seed(db *sqlx.DB) error {
 			('Language','japanese'),
 			('Language','portuguese'),
 			('Language','russian'),
-			('Language','spanish')`
+			('Language','spanish'),
+			('Availability','1 - 5 hours'),
+			('Availability','5  - 10 hours'),
+			('Availability','10 - 20 hours'),
+			('Availability','20 - 40 hours'),
+			('Availability','40 hours+')`
 	_, err := db.Exec(fs)
 	if err != nil {
 		fmt.Println("error seeding", err)
