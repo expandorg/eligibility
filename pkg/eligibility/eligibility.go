@@ -40,6 +40,7 @@ func GetWorkerEligibility(wf filter.FilterWorker, js []filter.FilterJob, profile
 				we.Eligibile = append(we.Eligibile, j.JobID)
 			}
 		default:
+			log.Printf("compared %v", j.Comparison)
 			continue
 		}
 	}
