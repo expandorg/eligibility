@@ -57,7 +57,6 @@ func GetWorkerEligibility(wf filter.FilterWorker, js []filter.FilterJob, profile
 			we.Eligibile = append(we.Eligibile[:i], we.Eligibile[i+1:]...)
 		}
 	}
-
-	log.Fatal(we)
+	log.Printf("info %v", we)
 	return we
 }
