@@ -33,7 +33,7 @@ func TestGetWorkerEligibility(t *testing.T) {
 				},
 				true,
 			},
-			WorkerEligibility{Complete: true, Eligibile: []uint64{usa}, InEligibile: []uint64{2, 3}},
+			WorkerEligibility{Complete: true, Eligible: []uint64{usa}, InEligible: []uint64{2, 3}},
 		},
 	}
 	for _, tt := range tests {
@@ -71,7 +71,7 @@ func TestGetWorkerEligibilityForNotEqualsComparison(t *testing.T) {
 				},
 				true,
 			},
-			WorkerEligibility{Complete: true, Eligibile: []uint64{1, 2}, InEligibile: []uint64{3}},
+			WorkerEligibility{Complete: true, Eligible: []uint64{1, 2}, InEligible: []uint64{3}},
 		},
 	}
 	for _, tt := range tests {

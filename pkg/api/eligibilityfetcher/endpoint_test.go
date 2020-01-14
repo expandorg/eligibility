@@ -50,8 +50,8 @@ func Test_makeEligibilityFetcherEndpoint(t *testing.T) {
 	// No error
 	el := eligibility.WorkerEligibility{
 		Complete:    false,
-		Eligibile:   []uint64{},
-		InEligibile: []uint64{1},
+		Eligible:   []uint64{},
+		InEligible: []uint64{1},
 	}
 
 	s.
