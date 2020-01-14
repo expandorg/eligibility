@@ -9,40 +9,6 @@ type WorkerEligibility struct {
 }
 
 // For now, we're only supporting filtering by country
-func GetWorkerEligibilityForNotEqualsComparison(wf filter.FilterWorker, js []filter.FilterJob, profileComplete bool) WorkerEligibility {
-	we := WorkerEligibility{
-		Complete:    profileComplete,
-		Eligibile:   []uint64{},
-		InEligibile: []uint64{},
-	}
-	el := map[uint64]bool{}
-	for _, j := range js {
-
-		switch j.Comparison {
-		case "==":
-			continue
-		case "!=":
-			if j.FilterID == wf.FilterID {
-				we.InEligibile = append(we.InEligibile, j.JobID)
-				el[j.JobID] = true
-			} else {
-				we.Eligibile = append(we.Eligibile, j.JobID)
-			}
-		default:
-			continue
-		}
-	}
-
-	// if a job is already ineligible for a country, remove it from eligible list.
-	for i, inel := range we.Eligibile {
-		if el[inel] {
-			we.Eligibile = append(we.Eligibile[:i], we.Eligibile[i+1:]...)
-		}
-	}
-	return we
-}
-
-
 func GetWorkerEligibility(wf filter.FilterWorker, js []filter.FilterJob, profileComplete bool) WorkerEligibility {
 	we := WorkerEligibility{
 		Complete:    profileComplete,
@@ -50,6 +16,8 @@ func GetWorkerEligibility(wf filter.FilterWorker, js []filter.FilterJob, profile
 		InEligibile: []uint64{},
 	}
 	el := map[uint64]bool{}
+	iel := map[uint64]bool{}
+
 	for _, j := range js {
 
 		switch j.Comparison {
@@ -61,7 +29,12 @@ func GetWorkerEligibility(wf filter.FilterWorker, js []filter.FilterJob, profile
 				we.InEligibile = append(we.InEligibile, j.JobID)
 			}
 		case "!=":
-			continue
+			if j.FilterID == wf.FilterID {
+				we.InEligibile = append(we.InEligibile, j.JobID)
+				iel[j.JobID] = true
+			} else {
+				we.Eligibile = append(we.Eligibile, j.JobID)
+			}
 		default:
 			continue
 		}
@@ -73,6 +46,13 @@ func GetWorkerEligibility(wf filter.FilterWorker, js []filter.FilterJob, profile
 			we.InEligibile = append(we.InEligibile[:i], we.InEligibile[i+1:]...)
 		}
 	}
+
+	// if a job is already ineligible for a country, remove it from eligible list.
+	for i, inel := range we.Eligibile {
+		if iel[inel] {
+			we.Eligibile = append(we.Eligibile[:i], we.Eligibile[i+1:]...)
+		}
+	}
+
 	return we
 }
-

@@ -81,23 +81,5 @@ func (s *service) GetWorkerEligibility(workerID string) (eligibility.WorkerEligi
 		profileComplete = true
 	}
 
-	// combine the results for normal worker eligibility (worker matches filter) and worker does not match filter
-	we := eligibility.GetWorkerEligibility(w, j, profileComplete)
-	we2 := eligibility.GetWorkerEligibilityForNotEqualsComparison(w, j, profileComplete)
-	// add the filters together
-	eligibile := []uint64{}
-	ineligibile := []uint64{}
-	eligibile = append(we.Eligibile, we2.Eligibile...)
-	ineligibile = append(we.InEligibile, we2.InEligibile...)
-
-	// return new eligibility
-	wf := eligibility.WorkerEligibility{
-		Complete:    profileComplete,
-		Eligibile:   eligibile,
-		InEligibile: ineligibile,
-	}
-
-
-	return wf, nil
+	return eligibility.GetWorkerEligibility(w, j, profileComplete), nil
 }
-

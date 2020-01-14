@@ -11,7 +11,7 @@ func TestGetWorkerEligibility(t *testing.T) {
 	type args struct {
 		wf filter.FilterWorker
 		js []filter.FilterJob
-		c bool
+		c  bool
 	}
 	usa := uint64(1)
 	spain := uint64(2)
@@ -28,12 +28,12 @@ func TestGetWorkerEligibility(t *testing.T) {
 				filter.FilterWorker{1, usa},
 				[]filter.FilterJob{
 					filter.FilterJob{1, usa, "=="},
-					filter.FilterJob{1, italy, "=="},
-					filter.FilterJob{2, spain, "=="},
+					filter.FilterJob{2, italy, "=="},
+					filter.FilterJob{3, spain, "=="},
 				},
 				true,
 			},
-			WorkerEligibility{Complete: true, Eligibile: []uint64{usa}, InEligibile: []uint64{2}},
+			WorkerEligibility{Complete: true, Eligibile: []uint64{usa}, InEligibile: []uint64{2, 3}},
 		},
 	}
 	for _, tt := range tests {
@@ -49,7 +49,7 @@ func TestGetWorkerEligibilityForNotEqualsComparison(t *testing.T) {
 	type args struct {
 		wf filter.FilterWorker
 		js []filter.FilterJob
-		c bool
+		c  bool
 	}
 	usa := uint64(1)
 	spain := uint64(2)
@@ -76,8 +76,8 @@ func TestGetWorkerEligibilityForNotEqualsComparison(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := GetWorkerEligibilityForNotEqualsComparison(tt.args.wf, tt.args.js, tt.args.c); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetWorkerEligibilityForNotEqualsComparison() = %v, want %v", got, tt.want)
+			if got := GetWorkerEligibility(tt.args.wf, tt.args.js, tt.args.c); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetWorkerEligibility() = %v, want %v", got, tt.want)
 			}
 		})
 	}
