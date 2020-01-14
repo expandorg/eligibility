@@ -1,2 +1,2 @@
 ALTER TABLE `filters_jobs` 
-  ADD `comparison` varchar(10) default "==";
+  ADD `comparison` varchar(11) NOT NULL default "==";
