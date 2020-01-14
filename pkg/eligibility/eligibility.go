@@ -1,8 +1,6 @@
 package eligibility
 
 import (
-	"log"
-
 	"github.com/gemsorg/eligibility/pkg/filter"
 )
 
@@ -40,7 +38,6 @@ func GetWorkerEligibility(wf filter.FilterWorker, js []filter.FilterJob, profile
 				we.Eligibile = append(we.Eligibile, j.JobID)
 			}
 		default:
-			log.Printf("compared %v", j.Comparison)
 			continue
 		}
 	}
@@ -58,6 +55,6 @@ func GetWorkerEligibility(wf filter.FilterWorker, js []filter.FilterJob, profile
 			we.Eligibile = append(we.Eligibile[:i], we.Eligibile[i+1:]...)
 		}
 	}
-	log.Printf("info %v", we)
+
 	return we
 }
