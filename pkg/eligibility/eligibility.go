@@ -1,6 +1,10 @@
 package eligibility
 
-import "github.com/gemsorg/eligibility/pkg/filter"
+import (
+	"log"
+
+	"github.com/gemsorg/eligibility/pkg/filter"
+)
 
 type WorkerEligibility struct {
 	Complete    bool     `json:"complete"`
@@ -54,5 +58,6 @@ func GetWorkerEligibility(wf filter.FilterWorker, js []filter.FilterJob, profile
 		}
 	}
 
+	log.Fatal(we)
 	return we
 }
