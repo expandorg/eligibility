@@ -80,6 +80,5 @@ func (s *service) GetWorkerEligibility(workerID string) (eligibility.WorkerEligi
 	if w.FilterID != 0 {
 		profileComplete = true
 	}
-
 	return eligibility.GetWorkerEligibility(w, j, profileComplete), nil
 }
