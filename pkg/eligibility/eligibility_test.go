@@ -23,7 +23,7 @@ func TestGetWorkerEligibility(t *testing.T) {
 		want WorkerEligibility
 	}{
 		{
-			"it returns true",
+			"equal comparison: eligible for usa job only",
 			args{
 				filter.FilterWorker{1, usa},
 				[]filter.FilterJob{
@@ -35,33 +35,8 @@ func TestGetWorkerEligibility(t *testing.T) {
 			},
 			WorkerEligibility{Complete: true, Eligible: []uint64{usa}, InEligible: []uint64{2, 3}},
 		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := GetWorkerEligibility(tt.args.wf, tt.args.js, tt.args.c); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetWorkerEligibility() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestGetWorkerEligibilityForNotEqualsComparison(t *testing.T) {
-	type args struct {
-		wf filter.FilterWorker
-		js []filter.FilterJob
-		c  bool
-	}
-	usa := uint64(1)
-	spain := uint64(2)
-	italy := uint64(3)
-
-	tests := []struct {
-		name string
-		args args
-		want WorkerEligibility
-	}{
 		{
-			"it returns true",
+			"not equal comparison: eligible for italy and spain jobs only",
 			args{
 				filter.FilterWorker{1, usa},
 				[]filter.FilterJob{
