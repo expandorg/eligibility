@@ -11,7 +11,7 @@ func TestGetWorkerEligibility(t *testing.T) {
 	type args struct {
 		wf filter.FilterWorker
 		js []filter.FilterJob
-		c bool
+		c  bool
 	}
 	usa := uint64(1)
 	spain := uint64(2)
@@ -23,17 +23,30 @@ func TestGetWorkerEligibility(t *testing.T) {
 		want WorkerEligibility
 	}{
 		{
-			"it returns true",
+			"equal comparison: eligible for usa job only",
 			args{
 				filter.FilterWorker{1, usa},
 				[]filter.FilterJob{
-					filter.FilterJob{1, usa},
-					filter.FilterJob{1, italy},
-					filter.FilterJob{2, spain},
+					filter.FilterJob{1, usa, "=="},
+					filter.FilterJob{2, italy, "=="},
+					filter.FilterJob{3, spain, "=="},
 				},
 				true,
 			},
-			WorkerEligibility{Complete: true, Eligibile: []uint64{usa}, InEligibile: []uint64{2}},
+			WorkerEligibility{Complete: true, Eligible: []uint64{usa}, InEligible: []uint64{2, 3}},
+		},
+		{
+			"not equal comparison: eligible for italy and spain jobs only",
+			args{
+				filter.FilterWorker{1, usa},
+				[]filter.FilterJob{
+					filter.FilterJob{1, italy, "!="},
+					filter.FilterJob{2, spain, "!="},
+					filter.FilterJob{3, usa, "!="},
+				},
+				true,
+			},
+			WorkerEligibility{Complete: true, Eligible: []uint64{1, 2}, InEligible: []uint64{3}},
 		},
 	}
 	for _, tt := range tests {

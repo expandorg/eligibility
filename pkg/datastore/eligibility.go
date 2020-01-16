@@ -216,7 +216,7 @@ func (s *EligibilityStore) GetWorkerEligibility(workerID string) (filter.FilterW
 		return fw, fj, err
 	}
 
-	err = s.DB.Select(&fj, "SELECT fj.`job_id`, fj.`filter_id` from filters AS f inner join filters_jobs AS fj on f.`id` = fj.`filter_id` where f.`type`=?", "Country")
+	err = s.DB.Select(&fj, "SELECT fj.`job_id`, fj.`filter_id`, fj.`comparison` from filters AS f inner join filters_jobs AS fj on f.`id` = fj.`filter_id` where f.`type`=?", "Country")
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return fw, fj, nil

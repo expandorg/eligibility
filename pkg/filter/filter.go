@@ -7,8 +7,9 @@ type Filter struct {
 }
 
 type FilterJob struct {
-	JobID    uint64 `db:"job_id"`
-	FilterID uint64 `db:"filter_id"`
+	JobID      uint64 `db:"job_id"`
+	FilterID   uint64 `db:"filter_id"`
+	Comparison string `db:"comparison"`
 }
 
 type FilterWorker struct {
