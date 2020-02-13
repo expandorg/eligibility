@@ -1,11 +1,11 @@
 package eligibility
 
 import (
-	"github.com/gemsorg/eligibility/pkg/filter"
+	"github.com/expandorg/eligibility/pkg/filter"
 )
 
 type WorkerEligibility struct {
-	Complete    bool     `json:"complete"`
+	Complete   bool     `json:"complete"`
 	Eligible   []uint64 `json:"eligible"`
 	InEligible []uint64 `json:"ineligible"`
 }
@@ -13,7 +13,7 @@ type WorkerEligibility struct {
 // For now, we're only supporting filtering by country
 func GetWorkerEligibility(wf filter.FilterWorker, js []filter.FilterJob, profileComplete bool) WorkerEligibility {
 	we := WorkerEligibility{
-		Complete:    profileComplete,
+		Complete:   profileComplete,
 		Eligible:   []uint64{},
 		InEligible: []uint64{},
 	}

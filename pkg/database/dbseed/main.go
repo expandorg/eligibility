@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/gemsorg/eligibility/pkg/database"
+	"github.com/expandorg/eligibility/pkg/database"
 	"github.com/jmoiron/sqlx"
 	env "github.com/joho/godotenv"
 )

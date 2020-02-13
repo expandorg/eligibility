@@ -6,10 +6,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gemsorg/eligibility/pkg/authentication"
-	"github.com/gemsorg/eligibility/pkg/filter"
-	"github.com/gemsorg/eligibility/pkg/server"
-	"github.com/gemsorg/eligibility/pkg/workerprofile"
+	"github.com/expandorg/eligibility/pkg/authentication"
+	"github.com/expandorg/eligibility/pkg/filter"
+	"github.com/expandorg/eligibility/pkg/server"
+	"github.com/expandorg/eligibility/pkg/workerprofile"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )

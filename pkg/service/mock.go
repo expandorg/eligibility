@@ -7,10 +7,10 @@ package service
 import (
 	reflect "reflect"
 
-	authentication "github.com/gemsorg/eligibility/pkg/authentication"
-	eligibility "github.com/gemsorg/eligibility/pkg/eligibility"
-	filter "github.com/gemsorg/eligibility/pkg/filter"
-	workerprofile "github.com/gemsorg/eligibility/pkg/workerprofile"
+	authentication "github.com/expandorg/eligibility/pkg/authentication"
+	eligibility "github.com/expandorg/eligibility/pkg/eligibility"
+	filter "github.com/expandorg/eligibility/pkg/filter"
+	workerprofile "github.com/expandorg/eligibility/pkg/workerprofile"
 	gomock "github.com/golang/mock/gomock"
 )
 

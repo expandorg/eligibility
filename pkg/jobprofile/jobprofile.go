@@ -1,6 +1,6 @@
 package jobprofile
 
-import "github.com/gemsorg/eligibility/pkg/filter"
+import "github.com/expandorg/eligibility/pkg/filter"
 
 type JobProfile struct {
 	Countries  []string              `json:"countries"`

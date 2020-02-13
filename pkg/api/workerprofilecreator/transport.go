@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/gemsorg/eligibility/pkg/workerprofile"
+	"github.com/expandorg/eligibility/pkg/workerprofile"
 
-	"github.com/gemsorg/eligibility/pkg/apierror"
+	"github.com/expandorg/eligibility/pkg/apierror"
 
-	service "github.com/gemsorg/eligibility/pkg/service"
+	service "github.com/expandorg/eligibility/pkg/service"
 	kithttp "github.com/go-kit/kit/transport/http"
 )
 

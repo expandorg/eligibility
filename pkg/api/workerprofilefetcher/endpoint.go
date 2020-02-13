@@ -3,9 +3,9 @@ package workerprofilefetcher
 import (
 	"context"
 
-	"github.com/gemsorg/eligibility/pkg/apierror"
-	"github.com/gemsorg/eligibility/pkg/authentication"
-	service "github.com/gemsorg/eligibility/pkg/service"
+	"github.com/expandorg/eligibility/pkg/apierror"
+	"github.com/expandorg/eligibility/pkg/authentication"
+	service "github.com/expandorg/eligibility/pkg/service"
 
 	"github.com/go-kit/kit/endpoint"
 )

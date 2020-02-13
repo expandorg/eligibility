@@ -4,13 +4,13 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/gemsorg/eligibility/pkg/authentication"
+	"github.com/expandorg/eligibility/pkg/authentication"
 
-	"github.com/gemsorg/eligibility/pkg/authorization"
-	"github.com/gemsorg/eligibility/pkg/datastore"
-	"github.com/gemsorg/eligibility/pkg/filter"
-	"github.com/gemsorg/eligibility/pkg/mock"
-	"github.com/gemsorg/eligibility/pkg/workerprofile"
+	"github.com/expandorg/eligibility/pkg/authorization"
+	"github.com/expandorg/eligibility/pkg/datastore"
+	"github.com/expandorg/eligibility/pkg/filter"
+	"github.com/expandorg/eligibility/pkg/mock"
+	"github.com/expandorg/eligibility/pkg/workerprofile"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -1,8 +1,8 @@
 package filtercreator
 
 import (
-	"github.com/gemsorg/eligibility/pkg/apierror"
-	"github.com/gemsorg/eligibility/pkg/filter"
+	"github.com/expandorg/eligibility/pkg/apierror"
+	"github.com/expandorg/eligibility/pkg/filter"
 )
 
 func validateRequest(req filter.Filter) (bool, *apierror.APIError) {

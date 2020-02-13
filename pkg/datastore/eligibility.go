@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gemsorg/eligibility/pkg/filter"
-	"github.com/gemsorg/eligibility/pkg/workerprofile"
+	"github.com/expandorg/eligibility/pkg/filter"
+	"github.com/expandorg/eligibility/pkg/workerprofile"
 	"github.com/jmoiron/sqlx"
 )
 

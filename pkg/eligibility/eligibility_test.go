@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/gemsorg/eligibility/pkg/filter"
+	"github.com/expandorg/eligibility/pkg/filter"
 )
 
 func TestGetWorkerEligibility(t *testing.T) {

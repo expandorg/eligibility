@@ -1,7 +1,7 @@
 package workerprofile
 
 import (
-	"github.com/gemsorg/eligibility/pkg/filter"
+	"github.com/expandorg/eligibility/pkg/filter"
 )
 
 const (

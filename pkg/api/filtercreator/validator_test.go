@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/gemsorg/eligibility/pkg/apierror"
-	"github.com/gemsorg/eligibility/pkg/filter"
+	"github.com/expandorg/eligibility/pkg/apierror"
+	"github.com/expandorg/eligibility/pkg/filter"
 )
 
 func Test_validateRequest(t *testing.T) {

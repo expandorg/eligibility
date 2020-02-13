@@ -5,15 +5,15 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/gemsorg/eligibility/pkg/authentication"
-	"github.com/gemsorg/eligibility/pkg/filter"
-	"github.com/gemsorg/eligibility/pkg/mock"
-	service "github.com/gemsorg/eligibility/pkg/service"
-	"github.com/gemsorg/eligibility/pkg/workerprofile"
+	"github.com/expandorg/eligibility/pkg/authentication"
+	"github.com/expandorg/eligibility/pkg/filter"
+	"github.com/expandorg/eligibility/pkg/mock"
+	service "github.com/expandorg/eligibility/pkg/service"
+	"github.com/expandorg/eligibility/pkg/workerprofile"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/gemsorg/eligibility/pkg/apierror"
+	"github.com/expandorg/eligibility/pkg/apierror"
 )
 
 func Test_errorResponse(t *testing.T) {

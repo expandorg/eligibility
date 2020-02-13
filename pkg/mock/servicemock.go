@@ -1,8 +1,8 @@
 package mock
 
 import (
-	"github.com/gemsorg/eligibility/pkg/filter"
-	"github.com/gemsorg/eligibility/pkg/workerprofile"
+	"github.com/expandorg/eligibility/pkg/filter"
+	"github.com/expandorg/eligibility/pkg/workerprofile"
 )
 
 var FakeFilter = filter.Filter{1, "Gender", "male"}

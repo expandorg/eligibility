@@ -5,10 +5,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/gemsorg/eligibility/pkg/apierror"
-	"github.com/gemsorg/eligibility/pkg/filter"
-	"github.com/gemsorg/eligibility/pkg/mock"
-	service "github.com/gemsorg/eligibility/pkg/service"
+	"github.com/expandorg/eligibility/pkg/apierror"
+	"github.com/expandorg/eligibility/pkg/filter"
+	"github.com/expandorg/eligibility/pkg/mock"
+	service "github.com/expandorg/eligibility/pkg/service"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )

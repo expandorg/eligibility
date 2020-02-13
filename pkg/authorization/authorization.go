@@ -1,7 +1,7 @@
 package authorization
 
 import (
-	"github.com/gemsorg/eligibility/pkg/authentication"
+	"github.com/expandorg/eligibility/pkg/authentication"
 )
 
 type Authorizer interface {

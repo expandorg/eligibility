@@ -3,14 +3,14 @@ package service
 import (
 	"strconv"
 
-	"github.com/gemsorg/eligibility/pkg/eligibility"
+	"github.com/expandorg/eligibility/pkg/eligibility"
 
-	"github.com/gemsorg/eligibility/pkg/authentication"
-	"github.com/gemsorg/eligibility/pkg/authorization"
-	"github.com/gemsorg/eligibility/pkg/datastore"
-	"github.com/gemsorg/eligibility/pkg/workerprofile"
+	"github.com/expandorg/eligibility/pkg/authentication"
+	"github.com/expandorg/eligibility/pkg/authorization"
+	"github.com/expandorg/eligibility/pkg/datastore"
+	"github.com/expandorg/eligibility/pkg/workerprofile"
 
-	"github.com/gemsorg/eligibility/pkg/filter"
+	"github.com/expandorg/eligibility/pkg/filter"
 )
 
 type EligibilityService interface {

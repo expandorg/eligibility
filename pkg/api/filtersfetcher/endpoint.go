@@ -3,8 +3,8 @@ package filtersfetcher
 import (
 	"context"
 
-	"github.com/gemsorg/eligibility/pkg/apierror"
-	service "github.com/gemsorg/eligibility/pkg/service"
+	"github.com/expandorg/eligibility/pkg/apierror"
+	service "github.com/expandorg/eligibility/pkg/service"
 
 	"github.com/go-kit/kit/endpoint"
 )

@@ -3,20 +3,20 @@ package server
 import (
 	"net/http"
 
-	"github.com/gemsorg/eligibility/pkg/api/eligibilityfetcher"
-	"github.com/gemsorg/eligibility/pkg/api/workerprofilecreator"
-	"github.com/gemsorg/eligibility/pkg/authentication"
+	"github.com/expandorg/eligibility/pkg/api/eligibilityfetcher"
+	"github.com/expandorg/eligibility/pkg/api/workerprofilecreator"
+	"github.com/expandorg/eligibility/pkg/authentication"
 
-	"github.com/gemsorg/eligibility/pkg/api/workerprofilefetcher"
+	"github.com/expandorg/eligibility/pkg/api/workerprofilefetcher"
 
-	"github.com/gemsorg/eligibility/pkg/api/filtercreator"
+	"github.com/expandorg/eligibility/pkg/api/filtercreator"
 
 	"github.com/jmoiron/sqlx"
 
-	"github.com/gemsorg/eligibility/pkg/api/filtersfetcher"
+	"github.com/expandorg/eligibility/pkg/api/filtersfetcher"
 
-	"github.com/gemsorg/eligibility/pkg/api/healthchecker"
-	"github.com/gemsorg/eligibility/pkg/service"
+	"github.com/expandorg/eligibility/pkg/api/healthchecker"
+	"github.com/expandorg/eligibility/pkg/service"
 	"github.com/gorilla/mux"
 )
 

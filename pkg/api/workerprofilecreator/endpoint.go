@@ -3,11 +3,11 @@ package workerprofilecreator
 import (
 	"context"
 
-	"github.com/gemsorg/eligibility/pkg/apierror"
-	"github.com/gemsorg/eligibility/pkg/authentication"
-	"github.com/gemsorg/eligibility/pkg/workerprofile"
+	"github.com/expandorg/eligibility/pkg/apierror"
+	"github.com/expandorg/eligibility/pkg/authentication"
+	"github.com/expandorg/eligibility/pkg/workerprofile"
 
-	service "github.com/gemsorg/eligibility/pkg/service"
+	service "github.com/expandorg/eligibility/pkg/service"
 
 	"github.com/go-kit/kit/endpoint"
 )
