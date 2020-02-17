@@ -168,7 +168,7 @@ func TestGetWorkerProfile(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			authData := authentication.AuthData{1591960106, "http://localhost:3000", 8}
+			authData := authentication.AuthData{1591960106, "http://localhost:8180", 8}
 			authorizer := authorization.NewAuthorizer()
 			authorizer.SetAuthData(authData)
 			s := &service{

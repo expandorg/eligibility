@@ -21,6 +21,6 @@ WORKDIR /app
 
 COPY --from=build-stage  /go/src/github.com/expandorg/eligibility/bin/eligibility .
 
-EXPOSE 3000
+EXPOSE 8180
 
 CMD ["./eligibility"]

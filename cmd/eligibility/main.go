@@ -36,7 +36,7 @@ func main() {
 	authorizer := authorization.NewAuthorizer()
 	svc := service.New(ds, authorizer)
 	s := server.New(db, svc)
-	log.Println("info", fmt.Sprintf("Starting service on port 3000"))
+	log.Println("info", fmt.Sprintf("Starting service on port 8180"))
 	http.Handle("/", s)
-	http.ListenAndServe(":3000", nil)
+	http.ListenAndServe(":8180", nil)
 }
