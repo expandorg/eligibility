@@ -13,8 +13,8 @@ type FilterJob struct {
 }
 
 type FilterWorker struct {
-	WorkerID uint64 `db:"worker_id"`
-	FilterID uint64 `db:"filter_id"`
+	WorkerID uint64 `db:"worker_id" json:"worker_id"`
+	FilterID uint64 `db:"filter_id" json:"filter_id"`
 }
 
 type Filters []Filter

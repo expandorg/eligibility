@@ -2,9 +2,7 @@ package datastore
 
 import (
 	"database/sql"
-	"fmt"
 	"strconv"
-	"strings"
 
 	"github.com/expandorg/eligibility/pkg/filter"
 	"github.com/expandorg/eligibility/pkg/workerprofile"
@@ -77,7 +75,7 @@ func (s *EligibilityStore) GetWorkerProfile(workerID string) (workerprofile.Prof
 }
 
 func (s *EligibilityStore) CreateWorkerProfile(wp workerprofile.NewProfile) (workerprofile.Profile, error) {
-	tx, err := s.DB.Begin()
+	tx := s.DB.MustBegin()
 
 	// Create new location filters if they don't exist
 	locIDS, err := s.locationToFilters(tx, wp)
@@ -106,13 +104,12 @@ func (s *EligibilityStore) CreateWorkerProfile(wp workerprofile.NewProfile) (wor
 	}
 
 	if len(wp.Attributes) > 0 {
-		vals := []string{}
-
+		workerAtts := []*filter.FilterWorker{}
 		for _, id := range wp.Attributes {
-			vals = append(vals, fmt.Sprintf("(%d, %d)", wp.WorkerID, id))
+			workerAtts = append(workerAtts, &filter.FilterWorker{WorkerID: wp.WorkerID, FilterID: uint64(id)})
 		}
-		attrQuery := "INSERT INTO filters_workers (worker_id, filter_id) VALUES" + strings.Join(vals, ",")
-		_, err = tx.Exec(attrQuery)
+
+		_, err := tx.NamedExec("INSERT INTO filters_workers (worker_id, filter_id) VALUES (:worker_id, :filter_id)", workerAtts)
 
 		if err != nil {
 			tx.Rollback()
@@ -135,7 +132,7 @@ func (s *EligibilityStore) CreateWorkerProfile(wp workerprofile.NewProfile) (wor
 }
 
 // We convert (find or create) location profile data (city, locality, country) to filters
-func (s *EligibilityStore) locationToFilters(tx *sql.Tx, wp workerprofile.NewProfile) ([]int, error) {
+func (s *EligibilityStore) locationToFilters(tx *sqlx.Tx, wp workerprofile.NewProfile) ([]int, error) {
 	locIDS := []int{}
 	a := map[string]string{
 		"Country":  wp.Country,
@@ -183,7 +180,7 @@ func (s *EligibilityStore) locationToFilters(tx *sql.Tx, wp workerprofile.NewPro
 	return locIDS, nil
 }
 
-func (s *EligibilityStore) findOrCreateFilter(tx *sql.Tx, tp string, value string) (int64, error) {
+func (s *EligibilityStore) findOrCreateFilter(tx *sqlx.Tx, tp string, value string) (int64, error) {
 	res, err := tx.Exec(
 		"INSERT INTO filters (type, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value=?",
 		tp, value, value,
