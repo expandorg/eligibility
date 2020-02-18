@@ -1,4 +1,4 @@
-# Assignment Service
+# Eligibility Service
 
 The eligibility service determines if workers are eligible for jobs. To do this, the service stores worker profiles, and the criteria (or filters) each job has defined. The eligibility service can be classified as a purely backend microservice in use by the core Expand domain.
 
