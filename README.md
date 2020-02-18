@@ -1,6 +1,6 @@
 # Assignment Service
  
-Backend service for worker<>job eligibility based on the worker's and job's profiles.
+Backend service for worker<>job eligibility based on the worker's and job's profiles. [API documentation](https://documenter.getpostman.com/view/7517177/S1a358nj)
 
 ## Getting started 
 
