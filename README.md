@@ -1,6 +1,9 @@
 # Assignment Service
- 
-Backend service for worker<>job eligibility based on the worker's and job's profiles. [API documentation](https://documenter.getpostman.com/view/7517177/S1a358nj)
+
+The eligibility service determines if workers are eligible for jobs. To do this, the service stores worker profiles, and the criteria (or filters) each job has defined. The eligibility service can be classified as a purely backend microservice in use by the core Expand domain.
+
+
+For full [API documentation](https://documenter.getpostman.com/view/7517177/S1a358nj)
 
 ## Getting started 
 
