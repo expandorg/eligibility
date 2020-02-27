@@ -76,12 +76,12 @@ build-migrations:
 run-migrations: build-migrations
 	docker run --network host eligibility-migration \
 	$(action) $(version) \
-	"mysql://$(ELIG_DB_USER):$(ELIG_DB_PASSWORD)@tcp($(ELIG_DB_HOST):$(ELIG_DB_PORT))/$(ELIG_DB_NAME)"
+	"mysql://$(ELIG_DB_USER):$(ELIG_DB_PASSWORD)@tcp($(ELIG_DB_HOST):$(ELIG_DB_PORT))/$(ELIG_DB)"
 
 migrate-latest: build-migrations
 	docker run --network host eligibility-migration \
 	goto $(LAST_MIGRATION) \
-	"mysql://$(ELIG_DB_USER):$(ELIG_DB_PASSWORD)@tcp($(ELIG_DB_HOST):$(ELIG_DB_PORT))/$(ELIG_DB_NAME)"
+	"mysql://$(ELIG_DB_USER):$(ELIG_DB_PASSWORD)@tcp($(ELIG_DB_HOST):$(ELIG_DB_PORT))/$(ELIG_DB)"
 
 db-seed:
 	@echo "Seeding db"
