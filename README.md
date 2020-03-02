@@ -16,11 +16,11 @@ For full [API documentation](https://documenter.getpostman.com/view/7517177/S1a3
 
 Clone the repository with: 
 
-`go get -u github.com/expandorg/assignment`
+`go get -u github.com/expandorg/eligibility`
 
 OR 
 
-create a directory `$GOPATH/src/github/expandorg` and execute: git clone git@github.com:expandorg/assignment.git 
+create a directory `$GOPATH/src/github/expandorg` and execute: git clone git@github.com:expandorg/eligibility.git 
 
 Run the project dependencies (db, etc.) with `make up`
 
